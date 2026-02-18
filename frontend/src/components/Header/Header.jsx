@@ -26,16 +26,14 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyHeader);
-
     return () => window.removeEventListener("scroll", handleStickyHeader);
   }, []);
 
-  // Mobile menu toggle
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
   return (
     <header
-      className="shadow-sm header sticky top-0 z-50 bg-white"
+      className="shadow-sm header z-50 bg-white"
       ref={headerRef}
     >
       <div
@@ -106,7 +104,6 @@ const Header = () => {
             </button>
           </Link>
 
-          {/* Mobile menu icon */}
           <span className="md:hidden" onClick={toggleMenu}>
             <BiMenu className="w-6 h-6 cursor-pointer" />
           </span>

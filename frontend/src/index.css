@@ -40,6 +40,7 @@ section {
   color: white;
   font-weight: 600;
   margin-top: 38px;
+  margin-bottom: 38px; /* add this */
 }
 
 .heading {
@@ -82,4 +83,16 @@ section {
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
+}
+
+.hero__section {
+  @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-center bg-cover
+}
+
+.stat__line {
+  margin-top: -14px;
+}
+
+.hero__img__gap {
+  margin-bottom: 30px;
 }

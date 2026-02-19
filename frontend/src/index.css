@@ -48,6 +48,7 @@ section {
   line-height: 54px;
   font-weight: 700;
   color: var(--headingColor);
+  align-items: center;
 }
 
 .text__para {
@@ -86,7 +87,7 @@ section {
 }
 
 .hero__section {
-  @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-center bg-cover
+  @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-center bg-cover;
 }
 
 .stat__line {
@@ -95,4 +96,52 @@ section {
 
 .hero__img__gap {
   margin-bottom: 30px;
+}
+.services__grid {
+  margin-top: 10px;
+}
+
+@media (min-width: 1024px) {
+  .services__grid {
+    margin-top: 20px;
+  }
+}
+
+.service__card {
+  padding: 30px 20px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service__card:hover {
+  box-shadow: 0 4px 24px rgba(0, 103, 255, 0.15);
+  border-color: #0067ff;
+}
+
+.service__card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.service__card__arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto 0;
+  color: #181a1e;
+  transition: all 0.3s ease;
+}
+
+.service__card:hover .service__card__arrow {
+  background: #0067ff;
+  border-color: #0067ff;
+  color: white;
 }

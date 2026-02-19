@@ -7,8 +7,17 @@ import icon02 from '../assets/images/icon02.png'
 import icon03 from '../assets/images/icon03.png'
 import { Link } from 'react-router-dom'
 import { BsArrowRight } from 'react-icons/bs'
+import Footer from '../components/Footer/Footer'
 
 const Home = () => {
+  const services = [
+    { name: 'Cancer Care', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+    { name: 'Labor & Delivery', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+    { name: 'Heart & Vascular', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+    { name: 'Mental Health', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+    { name: 'Neurology', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+    { name: 'Burn Treatment', desc: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.' },
+  ]
   return <>
     {/* HERO SECTION */}
     <>
@@ -137,9 +146,33 @@ const Home = () => {
 
         </div>
       </section>
+      <section className="pt-[40px] pb-[80px]">
+        <div className="container">
+          <div className="flex flex-col items-center text-center services__section__top">
+            <h2 className="heading">Our medical services</h2>
+            <p className="text__para max-w-[500px] mt-4">
+              World-class care for everyone. Our health System offers unmatched, expert health care.
+            </p>
+          </div>
 
-
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-[30px] services__grid">
+            {services.map((item, index) => (
+              <div key={index} className="service__item">
+                <div className="service__item__content">
+                  <h2 className="service__item__title">{item.name}</h2>
+                  <p className="text__para">{item.desc}</p>
+                </div>
+                <div className="service__item__footer">
+                  <div className="service__item__arrow">
+                    <BsArrowRight />
+                  </div>
+                  <span className="service__item__number">{index + 1}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   </>
 }

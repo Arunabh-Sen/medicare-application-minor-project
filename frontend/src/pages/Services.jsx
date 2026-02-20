@@ -99,8 +99,7 @@ const Services = () => {
             Our medical <span className="title__highlight">services</span>
           </h2>
           <p className="services__subtitle">
-            World-class care for everyone. Our health system offers unmatched expertise,
-            from cutting-edge diagnostics to compassionate long-term care.
+            Reliable healthcare for every patient, combining precise diagnosis with compassionate long-term care.
           </p>
 
           {/* Stats row */}

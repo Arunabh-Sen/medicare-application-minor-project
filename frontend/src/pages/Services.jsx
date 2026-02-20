@@ -2,43 +2,43 @@ import React, { useState } from 'react'
 
 const serviceData = [
   {
-    name: 'Cancer Care',
-    desc: 'World-class oncology care with leading specialists, cutting-edge therapies, and compassionate support for every stage of your journey.',
+    name: 'Cancer Specialists',
+    desc: 'Find experienced oncologists and book appointments instantly for consultations, follow-ups, and treatment guidance.',
     accent: '#FF6B6B',
     bg: 'linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)',
     tag: 'Oncology',
   },
   {
-    name: 'Labor & Delivery',
-    desc: 'Expert maternal care from conception to birth and beyond. Our team is with you at every milestone of this extraordinary journey.',
+    name: 'Gynecology Care',
+    desc: 'Schedule visits with trusted gynecologists for pregnancy care, routine checkups, and women’s health services.',
     accent: '#4ECDC4',
     bg: 'linear-gradient(135deg, #f0fffe 0%, #d8faf8 100%)',
     tag: 'Maternity',
   },
   {
-    name: 'Heart & Vascular',
-    desc: 'Advanced cardiovascular care, from diagnostics to complex interventions, with technology and expertise that sets the standard.',
+    name: 'Heart Specialists',
+    desc: 'Book cardiology appointments easily for heart checkups, diagnostics, and ongoing care with certified experts.',
     accent: '#FF4757',
     bg: 'linear-gradient(135deg, #fff0f0 0%, #ffe0e0 100%)',
     tag: 'Cardiology',
   },
   {
     name: 'Mental Health',
-    desc: 'Compassionate, evidence-based mental health services delivered with dignity, offering a safe space for healing and growth.',
+    desc: 'Connect with qualified psychologists and psychiatrists for therapy sessions and mental wellness support.',
     accent: '#A29BFE',
     bg: 'linear-gradient(135deg, #f5f0ff 0%, #ebe4ff 100%)',
     tag: 'Psychiatry',
   },
   {
     name: 'Neurology',
-    desc: 'Leading neurological expertise for complex conditions of the brain and nervous system, with precision diagnostics and personalized care.',
+    desc: 'Consult neurologists for migraines, nerve disorders, and brain health through easy online appointment booking.',
     accent: '#FDCB6E',
     bg: 'linear-gradient(135deg, #fffbf0 0%, #fff3d0 100%)',
     tag: 'Neuroscience',
   },
   {
-    name: 'Burn Treatment',
-    desc: 'Specialized burn care with advanced wound management, reconstructive services, and rehabilitation to restore quality of life.',
+    name: 'Emergency & Trauma',
+    desc: 'Quickly find nearby trauma specialists and book priority consultations for urgent medical needs.',
     accent: '#FD7F4B',
     bg: 'linear-gradient(135deg, #fff7f0 0%, #ffe8d8 100%)',
     tag: 'Trauma',
@@ -59,7 +59,6 @@ const ServiceCard = ({ service, index }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top badge + number */}
       <div className="card__header">
         <span
           className="card__tag"
@@ -70,13 +69,11 @@ const ServiceCard = ({ service, index }) => {
         <span className="card__num">0{index + 1}</span>
       </div>
 
-      {/* Content */}
       <div className="card__body">
         <h3 className="card__title">{service.name}</h3>
         <p className="card__desc">{service.desc}</p>
       </div>
 
-      {/* Bottom accent line */}
       <div
         className="card__accent__line"
         style={{ background: service.accent, opacity: hovered ? 1 : 0 }}
@@ -89,7 +86,6 @@ const Services = () => {
   return (
     <section className="services__section__wrapper">
       <div className="container">
-        {/* Section header */}
         <div className="services__header">
           <div className="services__eyebrow">
             <span className="eyebrow__dot" />
@@ -99,15 +95,14 @@ const Services = () => {
             Our medical <span className="title__highlight">services</span>
           </h2>
           <p className="services__subtitle">
-            Reliable healthcare for every patient, combining precise diagnosis with compassionate long-term care.
+            Easily book appointments with verified doctors across multiple specialties — fast, simple, and secure.
           </p>
 
-          {/* Stats row */}
           <div className="services__stats">
             {[
-              { value: '200+', label: 'Specialists' },
-              { value: '50k+', label: 'Patients Served' },
-              { value: '98%', label: 'Satisfaction' },
+              { value: '200+', label: 'Verified Doctors' },
+              { value: '50k+', label: 'Appointments Booked' },
+              { value: '98%', label: 'Happy Users' },
             ].map((stat, i) => (
               <div key={i} className="stat__pill">
                 <span className="stat__value">{stat.value}</span>
@@ -117,7 +112,6 @@ const Services = () => {
           </div>
         </div>
 
-        {/* Cards grid */}
         <div className="services__cards__grid">
           {serviceData.map((service, index) => (
             <ServiceCard key={index} service={service} index={index} />

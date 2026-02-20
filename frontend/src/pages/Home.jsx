@@ -62,7 +62,7 @@ const Home = () => {
                 className='reveal-fade-up text__para'
                 style={{ '--delay': '120ms' }}
               >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, iste odit impedit, consectetur quae nihil repellat praesentium placeat ut magnam deleniti amet quas?
+                Book appointments easily with trusted doctors and get quality care when you need it. Simple, fast, and reliable.
               </p>
               <button
                 data-reveal

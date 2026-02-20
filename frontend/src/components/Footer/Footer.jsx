@@ -1,25 +1,24 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { BsArrowRight } from 'react-icons/bs'
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa'
 
 const quickLinks01 = [
-  { path: '/home', display: 'Home' },
-  { path: '/about', display: 'About Us' },
-  { path: '/services', display: 'Services' },
-  { path: '/blog', display: 'Blog' },
+  { display: 'Home' },
+  { display: 'About Us' },
+  { display: 'Services' },
+  { display: 'Blog' },
 ]
 
 const quickLinks02 = [
-  { path: '/find-a-doctor', display: 'Find a Doctor' },
-  { path: '/request-appointment', display: 'Request an Appointment' },
-  { path: '/find-a-location', display: 'Find a Location' },
-  { path: '/get-opinion', display: 'Get an Opinion' },
+  { display: 'Find a Doctor' },
+  { display: 'Request an Appointment' },
+  { display: 'Find a Location' },
+  { display: 'Get an Opinion' },
 ]
 
 const quickLinks03 = [
-  { path: '/donate', display: 'Donate' },
-  { path: '/contact', display: 'Contact Us' },
+  { display: 'Donate' },
+  { display: 'Contact Us' },
 ]
 
 const Footer = () => {
@@ -55,10 +54,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks01.map((link, i) => (
                 <li key={i}>
-                  <Link to={link.path} className="footer__link">
+                  <a href="#" className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -69,10 +68,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks02.map((link, i) => (
                 <li key={i}>
-                  <Link to={link.path} className="footer__link">
+                  <a href="#" className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -83,10 +82,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks03.map((link, i) => (
                 <li key={i}>
-                  <Link to={link.path} className="footer__link">
+                  <a href="#" className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -106,8 +105,8 @@ const Footer = () => {
             © {year} Medicare. All rights reserved. Developed by the team of <span>Arunabh, Soumya, Dipanjan, Abhinav, Aayush & Atul</span> for the 6th semester minor project.
           </p>
           <div className="footer__bottom__links">
-            <Link to="#">Privacy Policy</Link>
-            <Link to="#">Terms of Service</Link>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
           </div>
         </div>
 

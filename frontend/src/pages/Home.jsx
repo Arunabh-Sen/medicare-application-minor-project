@@ -55,7 +55,7 @@ const Home = () => {
                 className='reveal-fade-up text-[36px] leading-[46px] text-[#181a1e] font-[800] md:text-[60px] md:leading-[70px]'
                 style={{ '--delay': '0ms' }}
               >
-                We help patients live a healthy, longer life.
+                Better health through easy access to care.
               </h1>
               <p
                 data-reveal

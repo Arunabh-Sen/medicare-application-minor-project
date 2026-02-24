@@ -120,7 +120,7 @@ const Home = () => {
     </section>
 
     {/* ── ICON CARDS ── */}
-    <section className="pt-0 pb-[80px]">
+    <section className="home__icon__section">
       <div className="container">
 
         <div
@@ -128,8 +128,14 @@ const Home = () => {
           className='reveal-fade-up flex flex-col items-center text-center'
           style={{ '--delay': '0ms' }}
         >
-          <h2 className="heading max-w-[400px]">Providing the best medical services</h2>
-          <p className="text__para max-w-[500px] mt-4">
+          <div className="services__eyebrow">
+            <span className="eyebrow__dot" />
+            <span>What We Offer</span>
+          </div>
+          <h2 className="home__section__title">
+            Providing the best <span className="title__highlight">medical services</span>
+          </h2>
+          <p className="services__subtitle">
             World-class care for everyone. Our health system offers unmatched, expert health care.
           </p>
         </div>
@@ -162,7 +168,7 @@ const Home = () => {
     </section>
 
     {/* ── SERVICE ITEMS ── */}
-    <section className="pt-[40px] pb-[80px]">
+    <section className="home__services__section">
       <div className="container">
 
         <div
@@ -170,8 +176,14 @@ const Home = () => {
           className='reveal-fade-up flex flex-col items-center text-center services__section__top'
           style={{ '--delay': '0ms' }}
         >
-          <h2 className="heading">Our medical services</h2>
-          <p className="text__para max-w-[500px] mt-4">
+          <div className="services__eyebrow">
+            <span className="eyebrow__dot" />
+            <span>Specialities</span>
+          </div>
+          <h2 className="home__section__title">
+            Our <span className="title__highlight">medical services</span>
+          </h2>
+          <p className="services__subtitle">
             World-class care for everyone. Our health System offers unmatched, expert health care.
           </p>
         </div>

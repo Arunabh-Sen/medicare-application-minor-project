@@ -475,6 +475,76 @@ section {
   color: white;
 }
 
+/* ========== HOME PAGE SECTION WRAPPERS ========== */
+
+.home__icon__section {
+  padding: 80px 0;
+  background: #f8faff;
+  position: relative;
+  overflow: hidden;
+}
+
+.home__icon__section::before {
+  content: "";
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 103, 255, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.home__services__section {
+  padding: 80px 0;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.home__services__section::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 103, 255, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.home__section__title {
+  font-family: "Fraunces", serif;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #0f1724;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
+@media (max-width: 1024px) {
+  .home__section__title {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 640px) {
+  .home__section__title {
+    font-size: 28px;
+  }
+}
+
 /* ========== SERVICES SECTION (Enhanced) ========== */
 
 .services__section__wrapper {

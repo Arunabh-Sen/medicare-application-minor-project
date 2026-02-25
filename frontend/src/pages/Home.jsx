@@ -133,10 +133,10 @@ const Home = () => {
             <span>What We Offer</span>
           </div>
           <h2 className="home__section__title">
-            Providing the best <span className="title__highlight">medical services</span>
+            How our<span className="title__highlight"> platform works</span>
           </h2>
           <p className="services__subtitle">
-            World-class care for everyone. Our health system offers unmatched, expert health care.
+            Use one platform to search doctors, check clinic locations, and book appointments easily from your device.
           </p>
         </div>
 
@@ -184,7 +184,7 @@ const Home = () => {
             Our <span className="title__highlight">medical services</span>
           </h2>
           <p className="services__subtitle">
-            World-class care for everyone. Our health System offers unmatched, expert health care.
+            We support multiple departments to help you book appointments for different health needs in one place.
           </p>
         </div>
 

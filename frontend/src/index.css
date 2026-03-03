@@ -826,3 +826,940 @@ section {
   opacity: 1;
   transform: translate(0, 0);
 }
+
+/* ======================================================
+   DOCTOR DETAILS PAGE
+   ====================================================== */
+
+.doctor__page__section {
+  padding: 70px 0 100px;
+  background: #f8faff;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.doctor__page__section::before {
+  content: "";
+  position: absolute;
+  top: -140px;
+  right: -140px;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 103, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Two-column layout */
+.doctor__layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 36px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .doctor__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── LEFT: Profile Card ── */
+.doctor__profile__card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1.5px solid #eaeff6;
+  padding: 32px 28px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  margin-bottom: 4px;
+}
+
+.doctor__profile__card:hover {
+  box-shadow: 0 8px 36px rgba(0, 103, 255, 0.10);
+}
+
+@media (max-width: 640px) {
+  .doctor__profile__card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Avatar */
+.doctor__profile__img__wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.doctor__avatar__placeholder {
+  width: 140px;
+  height: 160px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #c5d8ff 0%, #a0c0ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  color: #0067ff;
+}
+
+.doc__online__badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+}
+
+.doc__back__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #0067ff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.doc__back__btn:hover {
+  gap: 12px;
+  opacity: 0.8;
+}
+
+/* Info */
+.doctor__profile__info {
+  flex: 1;
+}
+
+.doc__specialty__tag {
+  display: inline-block;
+  background: rgba(0, 103, 255, 0.10);
+  color: #0067ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+
+.doc__name {
+  font-family: "Fraunces", serif;
+  font-size: 30px;
+  font-weight: 900;
+  color: #0f1724;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .doc__name { font-size: 24px; }
+}
+
+.doc__rating__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.doc__rating__num {
+  font-weight: 700;
+  font-size: 15px;
+  color: #0f1724;
+}
+
+.doc__rating__count {
+  font-size: 14px;
+  color: #8a97aa;
+}
+
+.doc__about__short {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #5a657a;
+  margin-top: 2px;
+}
+
+/* ── TABS ── */
+.doc__tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+  padding-bottom: 0;
+}
+
+.doc__tab__btn {
+  background: none;
+  border: none;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #8a97aa;
+  padding: 10px 4px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  margin-right: 24px;
+}
+
+.doc__tab__btn::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  border-radius: 2px;
+  background: #0067ff;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.doc__tab__active {
+  color: #0067ff;
+}
+
+.doc__tab__active::after {
+  transform: scaleX(1);
+}
+
+.doc__tab__divider {
+  height: 1.5px;
+  background: #eaeff6;
+  margin-bottom: 28px;
+}
+
+/* ── ABOUT TAB ── */
+.doc__about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.doc__section__block {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid #eaeff6;
+  padding: 24px 26px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.doc__block__title {
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1724;
+  margin-bottom: 18px;
+}
+
+.doc__timeline {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.doc__timeline__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.doc__timeline__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #0067ff;
+  margin-top: 5px;
+  box-shadow: 0 0 0 3px rgba(0, 103, 255, 0.15);
+}
+
+.doc__timeline__dot--blue {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
+.doc__timeline__main {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f1724;
+}
+
+.doc__timeline__main span {
+  font-weight: 400;
+  color: #5a657a;
+}
+
+.doc__timeline__sub {
+  font-size: 13px;
+  color: #8a97aa;
+  margin-top: 2px;
+}
+
+/* ── FEEDBACK TAB ── */
+.doc__feedback__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.doc__reviews__title {
+  font-family: "Fraunces", serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+.doc__reviews__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.doc__review__card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1.5px solid #eaeff6;
+  padding: 20px 22px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: box-shadow 0.25s ease;
+}
+
+.doc__review__card:hover {
+  box-shadow: 0 6px 24px rgba(0,103,255,0.09);
+}
+
+.doc__review__top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.doc__review__avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0067ff, #60a5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.doc__review__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doc__review__name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+.doc__review__date {
+  font-size: 13px;
+  color: #8a97aa;
+  margin-top: 1px;
+}
+
+.doc__review__text {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #5a657a;
+}
+
+/* ── REVIEW FORM ── */
+.doc__review__form {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid #eaeff6;
+  padding: 26px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doc__form__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f1724;
+}
+
+.doc__review__textarea {
+  width: 100%;
+  border: 1.5px solid #eaeff6;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14.5px;
+  color: #0f1724;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.25s ease;
+  background: #fafcff;
+}
+
+.doc__review__textarea::placeholder {
+  color: #b0bdc9;
+}
+
+.doc__review__textarea:focus {
+  border-color: #0067ff;
+  background: #fff;
+}
+
+.doc__submit__btn {
+  align-self: flex-start;
+  background: #0067ff;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.25s ease, transform 0.2s ease;
+}
+
+.doc__submit__btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.doc__success__msg {
+  font-size: 14px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* ── RIGHT: BOOKING CARD ── */
+.doctor__right {
+  position: sticky;
+  top: 100px;
+}
+
+.doc__booking__card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1.5px solid #eaeff6;
+  padding: 28px 26px;
+  box-shadow: 0 8px 36px rgba(0, 103, 255, 0.09);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Price Row */
+.doc__price__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1.5px solid #eaeff6;
+}
+
+.doc__price__label {
+  font-size: 15px;
+  color: #8a97aa;
+  font-weight: 500;
+}
+
+.doc__price__value {
+  font-family: "Fraunces", serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #0f1724;
+}
+
+/* Slots */
+.doc__slots__section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.doc__slots__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc__slots__icon {
+  color: #0067ff;
+  font-size: 15px;
+}
+
+.doc__slots__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+.doc__slots__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.doc__slot__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #eaeff6;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  background: #fafcff;
+}
+
+.doc__slot__item:hover {
+  border-color: #0067ff;
+  background: rgba(0, 103, 255, 0.04);
+}
+
+.doc__slot__selected {
+  border-color: #0067ff !important;
+  background: rgba(0, 103, 255, 0.07) !important;
+}
+
+.doc__slot__day {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f1724;
+}
+
+.doc__slot__time {
+  font-size: 13.5px;
+  color: #5a657a;
+}
+
+.doc__slot__check {
+  color: #0067ff;
+  font-size: 16px;
+}
+
+/* Book Button */
+.doc__book__btn {
+  width: 100%;
+  background: #0067ff;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 24px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(0, 103, 255, 0.30);
+}
+
+.doc__book__btn:hover:not(.doc__book__btn--disabled) {
+  opacity: 0.90;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 103, 255, 0.40);
+}
+
+.doc__book__btn--disabled {
+  background: #c8d8f0;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.doc__slot__hint {
+  text-align: center;
+  font-size: 13px;
+  color: #b0bdc9;
+}
+
+.doc__booking__success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.08);
+  border-radius: 10px;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(34, 197, 94, 0.25);
+}
+
+/* ======================================================
+   FIND A DOCTOR (LISTING) PAGE
+   ====================================================== */
+
+.find__doc__section {
+  padding: 70px 0 100px;
+  background: #f8faff;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.find__doc__section::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: -120px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 103, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Header */
+.find__doc__header {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.find__doc__title {
+  font-family: "Fraunces", serif;
+  font-size: 50px;
+  font-weight: 900;
+  color: #0f1724;
+  line-height: 1.1;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 1024px) { .find__doc__title { font-size: 38px; } }
+@media (max-width: 640px)  { .find__doc__title { font-size: 28px; } }
+
+.find__doc__subtitle {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #5a657a;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Search + Filter */
+.find__doc__controls {
+  background: #fff;
+  border-radius: 18px;
+  border: 1.5px solid #eaeff6;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.find__doc__search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8faff;
+  border: 1.5px solid #eaeff6;
+  border-radius: 50px;
+  padding: 12px 20px;
+  transition: border-color 0.25s ease;
+}
+
+.find__doc__search:focus-within {
+  border-color: #0067ff;
+  background: #fff;
+}
+
+.find__search__icon {
+  color: #8a97aa;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.find__search__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  color: #0f1724;
+}
+
+.find__search__input::placeholder {
+  color: #b0bdc9;
+}
+
+.find__doc__filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.find__filter__icon {
+  color: #0067ff;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.find__spec__pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.find__spec__pill {
+  background: #f0f4ff;
+  border: 1.5px solid #e2eaff;
+  color: #5a657a;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.find__spec__pill:hover {
+  border-color: #0067ff;
+  color: #0067ff;
+}
+
+.find__spec__pill--active {
+  background: #0067ff;
+  border-color: #0067ff;
+  color: #fff;
+}
+
+/* Results count */
+.find__doc__count {
+  font-size: 14px;
+  color: #8a97aa;
+  margin-bottom: 24px;
+}
+
+.find__doc__count strong {
+  color: #0f1724;
+  font-weight: 700;
+}
+
+/* Grid */
+.find__doc__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 1200px) { .find__doc__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .find__doc__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px)  { .find__doc__grid { grid-template-columns: 1fr; } }
+
+/* Doctor Card */
+.find__doc__card {
+  background: #fff;
+  border-radius: 18px;
+  border: 1.5px solid #eaeff6;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  animation: cardFadeUp 0.45s ease both;
+}
+
+.find__doc__card:hover {
+  border-color: #0067ff;
+  box-shadow: 0 12px 36px rgba(0, 103, 255, 0.13);
+  transform: translateY(-5px);
+}
+
+/* Card image area */
+.find__doc__img {
+  position: relative;
+  background: linear-gradient(135deg, #ccdeff 0%, #a8c8ff 100%);
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.find__doc__avatar {
+  font-size: 72px;
+  color: #0067ff;
+  opacity: 0.75;
+}
+
+.find__doc__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.find__doc__badge--on {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.find__doc__badge--off {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* Card info */
+.find__doc__info {
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.find__doc__specialty {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0067ff;
+  background: rgba(0, 103, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: 100px;
+  align-self: flex-start;
+}
+
+.find__doc__name {
+  font-family: "Fraunces", serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1724;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.find__doc__rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.find__doc__rating__num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+.find__doc__rating__count {
+  font-size: 12px;
+  color: #8a97aa;
+}
+
+/* Card footer */
+.find__doc__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1.5px solid #f0f4ff;
+}
+
+.find__doc__price {
+  display: flex;
+  flex-direction: column;
+}
+
+.find__doc__price__label {
+  font-size: 11px;
+  color: #8a97aa;
+  font-weight: 500;
+}
+
+.find__doc__price__val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+.find__doc__btn {
+  background: #0067ff;
+  color: #fff;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.find__doc__btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 103, 255, 0.30);
+}
+
+/* Empty state */
+.find__doc__empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: #8a97aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.find__doc__empty svg {
+  font-size: 64px;
+  opacity: 0.3;
+}
+
+.find__doc__empty p {
+  font-size: 17px;
+  color: #8a97aa;
+}
+

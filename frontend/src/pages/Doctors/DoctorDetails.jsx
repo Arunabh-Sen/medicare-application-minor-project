@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { BsStarFill, BsStar, BsStarHalf, BsCheckCircleFill, BsClock, BsCalendarCheck, BsArrowLeft } from 'react-icons/bs'
+import { BsStarFill, BsStar, BsStarHalf, BsCheckCircleFill, BsClock, BsCalendarCheck, BsArrowLeft, BsChatLeftText } from 'react-icons/bs'
 import { FaUserMd } from 'react-icons/fa'
 import { doctorData } from './doctorData'
 
 /* ── helper: scroll-reveal ── */
-function useReveal(selector = '[data-reveal]') {
+function useReveal(deps = [], selector = '[data-reveal]') {
     useEffect(() => {
         const els = document.querySelectorAll(selector)
         const observer = new IntersectionObserver(
@@ -21,7 +21,7 @@ function useReveal(selector = '[data-reveal]') {
         )
         els.forEach((el) => observer.observe(el))
         return () => observer.disconnect()
-    }, [])
+    }, deps)
 }
 
 /* ── Star renderer ── */
@@ -59,7 +59,7 @@ const StarPicker = ({ value, onChange }) => (
 
 /* ── Review Card ── */
 const ReviewCard = ({ review }) => (
-    <div className="doc__review__card" data-reveal style={{ '--delay': '0ms' }}>
+    <div className="doc__review__card reveal-fade-up" data-reveal style={{ '--delay': '0ms' }}>
         <div className="doc__review__top">
             <div className="doc__review__avatar">
                 {review.avatar
@@ -82,10 +82,7 @@ const ReviewCard = ({ review }) => (
 const DoctorDetails = () => {
     const { id } = useParams()
     const navigate = useNavigate()
-    useReveal()
-
-    // Find the matching doctor
-    const doctor = doctorData.find((d) => d.id === parseInt(id))
+    const reviewFormRef = useRef(null)
 
     const [activeTab, setActiveTab] = useState('about')
     const [selectedSlot, setSelectedSlot] = useState(null)
@@ -94,12 +91,26 @@ const DoctorDetails = () => {
     const [submitted, setSubmitted] = useState(false)
     const [bookingSuccess, setBookingSuccess] = useState(false)
 
+    useReveal([activeTab, id])
+
+    // Find the matching doctor
+    const doctor = doctorData.find((d) => d.id === parseInt(id))
+
     // Reset slot when switching doctors
     useEffect(() => {
         setSelectedSlot(null)
         setActiveTab('about')
         setBookingSuccess(false)
     }, [id])
+
+    const scrollToReviewForm = () => {
+        setActiveTab('feedback')
+        setTimeout(() => {
+            if (reviewFormRef.current) {
+                reviewFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+        }, 100)
+    }
 
     const handleSubmitReview = (e) => {
         e.preventDefault()
@@ -167,7 +178,11 @@ const DoctorDetails = () => {
                             <div className="doctor__profile__info">
                                 <span className="doc__specialty__tag">{doctor.specialty}</span>
                                 <h1 className="doc__name">{doctor.name}</h1>
-                                <div className="doc__rating__row">
+                                <div
+                                    className="doc__rating__row doc__rating__clickable"
+                                    onClick={() => setActiveTab('feedback')}
+                                    title="View Feedback"
+                                >
                                     <StarRow rating={doctor.rating} size={18} />
                                     <span className="doc__rating__num">{doctor.rating}</span>
                                     <span className="doc__rating__count">({doctor.totalReviews} reviews)</span>
@@ -232,16 +247,29 @@ const DoctorDetails = () => {
 
                         {activeTab === 'feedback' && (
                             <div className="doc__feedback__content">
-                                {/* All Reviews */}
-                                <h2 className="doc__reviews__title" data-reveal style={{ '--delay': '0ms' }}>
-                                    All reviews ({doctor.totalReviews})
-                                </h2>
+                                {/* All Reviews Header */}
+                                <div className="doc__reviews__header reveal-fade-up" data-reveal style={{ '--delay': '0ms' }}>
+                                    <h2 className="doc__reviews__title">
+                                        All reviews ({doctor.totalReviews})
+                                    </h2>
+                                    <button className="doc__write__review__btn" onClick={scrollToReviewForm}>
+                                        <BsChatLeftText /> Write a Review
+                                    </button>
+                                </div>
+
+                                {/* Reviews List */}
                                 <div className="doc__reviews__list">
                                     {doctor.reviews.map((r) => <ReviewCard key={r.id} review={r} />)}
                                 </div>
 
                                 {/* Leave a review form */}
-                                <form className="doc__review__form" onSubmit={handleSubmitReview} data-reveal style={{ '--delay': '80ms' }}>
+                                <form
+                                    ref={reviewFormRef}
+                                    className="doc__review__form reveal-fade-up"
+                                    onSubmit={handleSubmitReview}
+                                    data-reveal
+                                    style={{ '--delay': '80ms' }}
+                                >
                                     <h3 className="doc__form__title">How would you rate the overall experience?*</h3>
                                     <StarPicker value={ratingValue} onChange={setRatingValue} />
 
@@ -334,6 +362,13 @@ const DoctorDetails = () => {
                             {!doctor.available && (
                                 <p className="doc__slot__hint" style={{ color: '#ef4444' }}>This doctor is currently not accepting appointments</p>
                             )}
+
+                            {/* Feedback Link in Booking Card */}
+                            <div className="doc__booking__feedback">
+                                <button className="doc__feedback__link" onClick={scrollToReviewForm}>
+                                    <BsChatLeftText /> Give Feedback
+                                </button>
+                            </div>
                         </div>
                     </div>
 

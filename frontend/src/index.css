@@ -1423,9 +1423,73 @@ section {
   border: 1.5px solid rgba(34, 197, 94, 0.25);
 }
 
+.doc__reviews__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.doc__write__review__btn {
+  background: #f0f4ff;
+  color: #0067ff;
+  border: 1.5px solid #e2eaff;
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.22s ease;
+}
+
+.doc__write__review__btn:hover {
+  background: #0067ff;
+  color: #fff;
+  border-color: #0067ff;
+}
+
+.doc__rating__clickable {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.doc__rating__clickable:hover {
+  opacity: 0.75;
+}
+
+.doc__booking__feedback {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.doc__feedback__link {
+  background: none;
+  border: none;
+  color: #0067ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.doc__feedback__link:hover {
+  background: rgba(0, 103, 255, 0.05);
+  text-decoration: underline;
+}
+
 /* ======================================================
    FIND A DOCTOR (LISTING) PAGE
    ====================================================== */
+
 
 .find__doc__section {
   padding: 70px 0 100px;

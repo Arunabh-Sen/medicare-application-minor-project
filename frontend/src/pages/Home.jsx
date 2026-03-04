@@ -64,13 +64,15 @@ const Home = () => {
               >
                 Book appointments easily with trusted doctors and get quality care when you need it. Simple, fast, and reliable.
               </p>
-              <button
-                data-reveal
-                className='reveal-fade-up btn cursor-pointer mb-[30px]'
-                style={{ '--delay': '220ms' }}
-              >
-                Book an Appointment
-              </button>
+              <Link to='/doctors'>
+                <button
+                  data-reveal
+                  className='reveal-fade-up btn cursor-pointer mb-[30px]'
+                  style={{ '--delay': '220ms' }}
+                >
+                  Book an Appointment
+                </button>
+              </Link>
             </div>
 
             {/* stats */}

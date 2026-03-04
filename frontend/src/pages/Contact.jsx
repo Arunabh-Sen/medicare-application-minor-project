@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { BsEnvelopeFill, BsTelephoneFill, BsGeoAltFill, BsSendFill } from 'react-icons/bs'
+import React, { useEffect, useState } from 'react'
+import { BsEnvelopeFill, BsTelephoneFill, BsGeoAltFill, BsSendFill, BsCheckCircleFill, BsX } from 'react-icons/bs'
 
 /* ── scroll reveal hook ── */
 function useReveal(selector = '[data-reveal]') {
@@ -23,15 +23,39 @@ function useReveal(selector = '[data-reveal]') {
 
 const Contact = () => {
   useReveal()
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle form submission logic here
-    console.log('Form submitted')
+    // Simulate API call
+    setTimeout(() => {
+      setShowSuccess(true)
+      // Auto hide after 5 seconds
+      setTimeout(() => setShowSuccess(false), 5000)
+    }, 600)
   }
 
   return (
     <div className="contact__page__wrapper">
+      {/* ── SUCCESS POPUP ── */}
+      {showSuccess && (
+        <div className="success__popup__overlay">
+          <div className="success__popup">
+            <button className="popup__close" onClick={() => setShowSuccess(false)}>
+              <BsX />
+            </button>
+            <div className="popup__icon">
+              <BsCheckCircleFill />
+            </div>
+            <h3>Message Sent!</h3>
+            <p>Thank you for reaching out. Our team will get back to you shortly.</p>
+            <button className="popup__btn" onClick={() => setShowSuccess(false)}>
+              Great!
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ── HERO SECTION ── */}
       <section className="contact__hero">
         <div className="container">
@@ -52,7 +76,7 @@ const Contact = () => {
       </section>
 
       {/* ── MAIN CONTENT (Form + Info) ── */}
-      <section className="contact__main__section pt-0">
+      <section className="contact__main__section pt-0 pb-[100px]">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-[50px] items-start">
 
@@ -110,7 +134,7 @@ const Contact = () => {
 
                 <button type="submit" className="contact__btn">
                   <span>Send Message</span>
-                  <BsSendFill className="ml-2" />
+                  <BsSendFill />
                 </button>
               </form>
             </div>
@@ -138,7 +162,7 @@ const Contact = () => {
                   icon: <BsGeoAltFill />,
                   title: 'Visit Us',
                   desc: 'Visit our main office.',
-                  detail: '123 Medical Drive, Health City, HC 12345',
+                  detail: 'KIIT Campus, Bhubaneswar, India',
                   delay: '420ms',
                   color: '#FF6B6B'
                 }
@@ -159,17 +183,6 @@ const Contact = () => {
                   </div>
                 </div>
               ))}
-
-              {/* FAQ/Help nudge */}
-              <div
-                className="help__nudge"
-                data-reveal
-                style={{ '--delay': '520ms' }}
-              >
-                <h3>Need immediate help?</h3>
-                <p>Check our FAQ page or start a live chat with our support team.</p>
-                <button className="nudge__btn">View FAQs</button>
-              </div>
             </div>
 
           </div>

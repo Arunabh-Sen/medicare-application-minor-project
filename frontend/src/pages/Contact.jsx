@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { BsEnvelopeFill, BsTelephoneFill, BsGeoAltFill, BsSendFill } from 'react-icons/bs'
-import { toast } from 'react-toastify'
 
 /* ── scroll reveal hook ── */
 function useReveal(selector = '[data-reveal]') {
@@ -28,8 +27,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     // Handle form submission logic here
-    toast.success('Message sent successfully! We will get back to you soon.')
-    e.target.reset()
+    console.log('Form submitted')
   }
 
   return (
@@ -54,7 +52,7 @@ const Contact = () => {
       </section>
 
       {/* ── MAIN CONTENT (Form + Info) ── */}
-      <section className="contact__main__section pt-0 pb-[100px]">
+      <section className="contact__main__section pt-0">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-[50px] items-start">
 
@@ -112,7 +110,7 @@ const Contact = () => {
 
                 <button type="submit" className="contact__btn">
                   <span>Send Message</span>
-                  <BsSendFill className="find__btn__icon ml-2" />
+                  <BsSendFill className="ml-2" />
                 </button>
               </form>
             </div>
@@ -140,7 +138,7 @@ const Contact = () => {
                   icon: <BsGeoAltFill />,
                   title: 'Visit Us',
                   desc: 'Visit our main office.',
-                  detail: 'KIIT Campus, Bhubaneswar, India',
+                  detail: '123 Medical Drive, Health City, HC 12345',
                   delay: '420ms',
                   color: '#FF6B6B'
                 }
@@ -161,6 +159,17 @@ const Contact = () => {
                   </div>
                 </div>
               ))}
+
+              {/* FAQ/Help nudge */}
+              <div
+                className="help__nudge"
+                data-reveal
+                style={{ '--delay': '520ms' }}
+              >
+                <h3>Need immediate help?</h3>
+                <p>Check our FAQ page or start a live chat with our support team.</p>
+                <button className="nudge__btn">View FAQs</button>
+              </div>
             </div>
 
           </div>

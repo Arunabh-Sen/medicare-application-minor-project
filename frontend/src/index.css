@@ -1934,7 +1934,6 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px; /* Fixed gap between text and icon */
   transition: all 0.25s ease;
   box-shadow: 0 4px 18px rgba(0, 103, 255, 0.25);
 }
@@ -1992,4 +1991,43 @@ section {
   color: #0f1724;
 }
 
+.help__nudge {
+  background: linear-gradient(135deg, #0b1628 0%, #1e293b 100%);
+  border-radius: 18px;
+  padding: 28px;
+  color: #fff;
+  text-align: center;
+}
+
+.help__nudge h3 {
+  font-family: "Fraunces", serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.help__nudge p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.nudge__btn {
+  background: #fff;
+  color: #0b1628;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nudge__btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 

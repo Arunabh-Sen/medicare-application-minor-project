@@ -9,25 +9,7 @@ import { Link } from 'react-router-dom'
 import { BsArrowRight } from 'react-icons/bs'
 import Footer from '../components/Footer/Footer'
 
-/* ── tiny hook: triggers .animate-in when element enters viewport ── */
-function useReveal(selector = '[data-reveal]') {
-  useEffect(() => {
-    const els = document.querySelectorAll(selector)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('animate-in')
-            observer.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
+import useReveal from '../hooks/useReveal'
 
 const Home = () => {
   useReveal()

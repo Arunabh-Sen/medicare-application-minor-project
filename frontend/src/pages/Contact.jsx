@@ -1,25 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BsEnvelopeFill, BsTelephoneFill, BsGeoAltFill, BsSendFill, BsCheckCircleFill, BsX } from 'react-icons/bs'
 
-/* ── scroll reveal hook ── */
-function useReveal(selector = '[data-reveal]') {
-  useEffect(() => {
-    const els = document.querySelectorAll(selector)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('animate-in')
-            observer.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
+import useReveal from '../hooks/useReveal'
 
 const Contact = () => {
   useReveal()

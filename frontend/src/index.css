@@ -20,6 +20,10 @@ body {
   --textColor: #4e545f;
 }
 
+.font-fraunces {
+  font-family: "Fraunces", serif;
+}
+
 /* Layout */
 
 .container {

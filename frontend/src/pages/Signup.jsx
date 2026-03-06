@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
 import signupImg from '../assets/images/signup.gif'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import uploadImageToCloudinary from '../utils/uploadCloudinary'
+import { BASE_URL } from '../config'
+import { toast } from 'react-toastify'
+import HashLoader from 'react-spinners/HashLoader'
 import useReveal from '../hooks/useReveal'
 
 const Signup = () => {
   useReveal()
+  const [selectedFile, setSelectedFile] = useState(null)
   const [previewURL, setPreviewURL] = useState('')
+  const [loading, setLoading] = useState(false)
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,21 +22,51 @@ const Signup = () => {
     role: 'patient',
   })
 
+  const navigate = useNavigate()
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleFileInputChange = (event) => {
+  const handleFileInputChange = async (event) => {
     const file = event.target.files[0]
-    if (file) {
-      setPreviewURL(URL.createObjectURL(file))
-      setFormData({ ...formData, photo: file })
-    }
+
+    setLoading(true)
+    const data = await uploadImageToCloudinary(file)
+
+    setPreviewURL(data.url)
+    setSelectedFile(data.url)
+    setFormData({ ...formData, photo: data.url })
+    setLoading(false)
   }
 
   const submitHandler = async (event) => {
     event.preventDefault()
-    console.log(formData)
+    setLoading(true)
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/register`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const { message } = await res.json()
+
+      if (!res.ok) {
+        throw new Error(message)
+      }
+
+      setLoading(false)
+      toast.success(message)
+      navigate('/login')
+
+    } catch (err) {
+      toast.error(err.message)
+      setLoading(false)
+    }
   }
 
   return (
@@ -170,9 +207,12 @@ const Signup = () => {
               </div>
 
               <button
+                disabled={loading && true}
                 type='submit'
                 style={{
-                  display: 'block',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   width: '100%',
                   background: '#0067ff',
                   color: '#fff',
@@ -181,14 +221,14 @@ const Signup = () => {
                   borderRadius: '50px',
                   padding: '14px 24px',
                   border: 'none',
-                  cursor: 'pointer',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   boxShadow: '0 4px 20px rgba(0, 103, 255, 0.32)',
                   transition: 'opacity 0.2s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
-                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                onMouseEnter={e => { if (!loading) e.currentTarget.style.opacity = '0.88' }}
+                onMouseLeave={e => { if (!loading) e.currentTarget.style.opacity = '1' }}
               >
-                Sign Up
+                {loading ? <HashLoader size={35} color='#ffffff' /> : 'Sign Up'}
               </button>
 
               <p style={{ marginTop: '20px', color: '#8a97aa', textAlign: 'center', fontSize: '15px' }}>

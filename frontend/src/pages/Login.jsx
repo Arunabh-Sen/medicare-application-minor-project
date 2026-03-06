@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../config.js'
+import { authContext } from '../context/AuthContext.jsx'
+import { toast } from 'react-toastify'
+import HashLoader from 'react-spinners/HashLoader'
 import useReveal from '../hooks/useReveal'
 
 const Login = () => {
@@ -9,13 +13,55 @@ const Login = () => {
     password: ''
   })
 
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { dispatch } = useContext(authContext)
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const submitHandler = async (event) => {
     event.preventDefault()
-    console.log(formData)
+    setLoading(true)
+
+    try {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const result = await res.json()
+
+      if (!res.ok) {
+        throw new Error(result.message)
+      }
+
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: {
+          user: result.data,
+          token: result.token,
+          role: result.role,
+        }
+      })
+
+      setLoading(false)
+      toast.success(result.message)
+
+      if (result.role === 'patient') {
+        navigate('/users/profile/me')
+      } else {
+        navigate('/doctors/profile/me')
+      }
+
+    } catch (err) {
+      toast.error(err.message)
+      setLoading(false)
+    }
   }
 
   return (
@@ -108,6 +154,7 @@ const Login = () => {
           <div style={{ marginTop: '32px' }}>
             <button
               type='submit'
+              disabled={loading}
               style={{
                 display: 'block',
                 width: '100%',
@@ -118,14 +165,14 @@ const Login = () => {
                 borderRadius: '50px',
                 padding: '14px 24px',
                 border: 'none',
-                cursor: 'pointer',
+                cursor: loading ? 'not-allowed' : 'pointer',
                 boxShadow: '0 4px 20px rgba(0, 103, 255, 0.32)',
                 transition: 'opacity 0.2s ease, transform 0.2s ease',
               }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' }}
+              onMouseEnter={e => { if (!loading) { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
+              onMouseLeave={e => { if (!loading) { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' } }}
             >
-              Login
+              {loading ? <HashLoader size={25} color='#fff' /> : 'Login'}
             </button>
           </div>
 

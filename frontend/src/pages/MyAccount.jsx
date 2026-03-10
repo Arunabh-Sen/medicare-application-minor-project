@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { authContext } from "../context/AuthContext";
 import MyBookings from "./MyBookings";
 import Profile from "./Profile";
@@ -6,10 +7,12 @@ import useFetchData from "../hooks/useFetchData";
 import { BASE_URL } from "../config";
 import Loading from "../components/Loader/Loading";
 import Error from "../components/Error/Error";
+import { toast } from "react-toastify";
 
 const MyAccount = () => {
     const { dispatch } = useContext(authContext);
     const [tab, setTab] = useState("bookings");
+    const navigate = useNavigate();
 
     const {
         data: userData,
@@ -19,6 +22,33 @@ const MyAccount = () => {
 
     const handleLogout = () => {
         dispatch({ type: "LOGOUT" });
+        navigate("/");
+    };
+
+    const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        if (!confirmDelete) return;
+
+        try {
+            const res = await fetch(`${BASE_URL}/users/${userData._id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+
+            dispatch({ type: "LOGOUT" });
+            toast.success(result.message);
+            navigate("/");
+        } catch (err) {
+            toast.error(err.message);
+        }
     };
 
     return (
@@ -94,6 +124,7 @@ const MyAccount = () => {
                                     Logout
                                 </button>
                                 <button
+                                    onClick={handleDeleteAccount}
                                     style={{
                                         width: "100%",
                                         background: "#ef4444",

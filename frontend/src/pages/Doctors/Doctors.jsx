@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { BsStarFill, BsStarHalf, BsStar, BsSearch, BsFunnelFill } from 'react-icons/bs'
 import { FaUserMd } from 'react-icons/fa'
-import { doctorData } from './doctorData'
+import { doctorData as staticDoctorData } from './doctorData'
+import { BASE_URL } from '../../config'
 
 /* ── scroll reveal ── */
 function useReveal(selector = '[data-reveal]') {
@@ -35,21 +36,35 @@ const StarRow = ({ rating }) => {
   return <div style={{ display: 'flex', gap: 3 }}>{stars}</div>
 }
 
-/* doctorData is imported from ./doctorData */
-
 const specialties = ['All', 'Surgeon', 'Cardiologist', 'Neurologist', 'Gynecologist', 'Oncologist', 'Dermatologist', 'Orthopedist', 'Psychiatrist']
 
-/* Map shared data shape to listing-card shape */
-const listingData = doctorData.map((d) => ({
-  id: d.id,
+/* Normalise a DB doctor to listing shape */
+const normaliseDbDoctor = (d) => ({
+  id: d._id,       // MongoDB _id — used for booking
+  localId: null,    // no static id
+  name: d.name,
+  specialty: d.specialization,
+  rating: d.averageRating || 0,
+  reviews: d.totalRating || 0,
+  price: d.ticketPrice,
+  currency: 'INR',
+  available: d.isApproved === 'approved',
+  isDbDoctor: true,
+})
+
+/* Normalise a static doctor to listing shape */
+const normaliseStaticDoctor = (d) => ({
+  id: d.id,           // integer id used in DoctorDetails route
+  localId: d.id,
   name: d.name,
   specialty: d.specialty,
   rating: d.rating,
   reviews: d.totalReviews,
   price: d.ticketPrice,
-  available: d.available,
   currency: d.currency,
-}))
+  available: d.available,
+  isDbDoctor: false,
+})
 
 /* ── Doctor Card ── */
 const DoctorCard = ({ doctor, index }) => (
@@ -82,9 +97,13 @@ const DoctorCard = ({ doctor, index }) => (
       <div className="find__doc__footer">
         <div className="find__doc__price">
           <span className="find__doc__price__label">Fee</span>
-          <span className="find__doc__price__val">{doctor.price} {doctor.currency}</span>
+          <span className="find__doc__price__val">₹{doctor.price}</span>
         </div>
-        <Link to={`/doctors/${doctor.id}`} className="find__doc__btn">
+        {/* DB doctors link to /doctors/db/:id, static doctors to /doctors/:localId */}
+        <Link
+          to={doctor.isDbDoctor ? `/doctors/db/${doctor.id}` : `/doctors/${doctor.id}`}
+          className="find__doc__btn"
+        >
           Book Now
         </Link>
       </div>
@@ -98,10 +117,47 @@ const Doctors = () => {
 
   const [search, setSearch] = useState('')
   const [activeSpec, setActiveSpec] = useState('All')
+  const [dbDoctors, setDbDoctors] = useState([])
+  const [dbLoading, setDbLoading] = useState(true)
 
-  const filtered = listingData.filter((d) => {
+  // Fetch approved doctors from DB on mount
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/doctors`)
+        const json = await res.json()
+        if (json.success && json.data?.length > 0) {
+          setDbDoctors(json.data.map(normaliseDbDoctor))
+        }
+      } catch (e) {
+        // silently fall back to static data
+      } finally {
+        setDbLoading(false)
+      }
+    }
+    fetchDoctors()
+  }, [])
+
+  // Build final list:
+  // - Use DB doctors if available
+  // - Also include static doctors NOT already in DB (by name match) as fallback
+  const allDoctors = React.useMemo(() => {
+    if (dbDoctors.length === 0) {
+      return staticDoctorData.map(normaliseStaticDoctor)
+    }
+
+    const dbNames = new Set(dbDoctors.map((d) => d.name.toLowerCase()))
+    const staticFallback = staticDoctorData
+      .filter((d) => !dbNames.has(d.name.toLowerCase()))
+      .map(normaliseStaticDoctor)
+
+    return [...dbDoctors, ...staticFallback]
+  }, [dbDoctors])
+
+  const filtered = allDoctors.filter((d) => {
     const matchSpec = activeSpec === 'All' || d.specialty === activeSpec
-    const matchSearch = d.name.toLowerCase().includes(search.toLowerCase()) ||
+    const matchSearch =
+      d.name.toLowerCase().includes(search.toLowerCase()) ||
       d.specialty.toLowerCase().includes(search.toLowerCase())
     return matchSpec && matchSearch
   })
@@ -154,17 +210,23 @@ const Doctors = () => {
         </div>
 
         {/* ── Results count ── */}
-        <p className="find__doc__count" data-reveal style={{ '--delay': '130ms' }}>
-          Showing <strong>{filtered.length}</strong> doctor{filtered.length !== 1 ? 's' : ''}
-          {activeSpec !== 'All' ? ` in ${activeSpec}` : ''}
-          {search ? ` matching "${search}"` : ''}
-        </p>
+        {!dbLoading && (
+          <p className="find__doc__count" data-reveal style={{ '--delay': '130ms' }}>
+            Showing <strong>{filtered.length}</strong> doctor{filtered.length !== 1 ? 's' : ''}
+            {activeSpec !== 'All' ? ` in ${activeSpec}` : ''}
+            {search ? ` matching "${search}"` : ''}
+          </p>
+        )}
+
+        {dbLoading && (
+          <p style={{ textAlign: 'center', color: '#4e545f', marginTop: 24 }}>Loading doctors…</p>
+        )}
 
         {/* ── Grid ── */}
-        {filtered.length > 0 ? (
+        {!dbLoading && (filtered.length > 0 ? (
           <div className="find__doc__grid">
             {filtered.map((doctor, i) => (
-              <DoctorCard key={doctor.id} doctor={doctor} index={i} />
+              <DoctorCard key={`${doctor.isDbDoctor ? 'db' : 'st'}-${doctor.id}`} doctor={doctor} index={i} />
             ))}
           </div>
         ) : (
@@ -172,7 +234,7 @@ const Doctors = () => {
             <FaUserMd />
             <p>No doctors found. Try a different search or filter.</p>
           </div>
-        )}
+        ))}
 
       </div>
     </section>

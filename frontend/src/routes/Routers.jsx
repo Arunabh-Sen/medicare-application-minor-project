@@ -6,6 +6,7 @@ import Signup from "../pages/Signup"
 import Contact from "../pages/Contact"
 import Doctors from "../pages/Doctors/Doctors"
 import DoctorDetails from '../pages/Doctors/DoctorDetails'
+import DbDoctorDetails from '../pages/Doctors/DbDoctorDetails'
 
 import { Routes, Route } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ const Routers = () => {
     <Route path='/home' element={<Home />} />
     <Route path='/doctors' element={<Doctors />} />
     <Route path='/doctors/:id' element={<DoctorDetails />} />
+    <Route path='/doctors/db/:id' element={<DbDoctorDetails />} />
     <Route path='/login' element={<Login />} />
     <Route path='/register' element={<Signup />} />
     <Route path='/contact' element={<Contact />} />

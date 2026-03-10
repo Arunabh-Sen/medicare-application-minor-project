@@ -1,27 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../config";
 import { toast } from "react-toastify";
-import HashLoader from "react-spinners/HashLoader";
+
+const inputStyle = {
+    width: "100%",
+    padding: "12px 14px",
+    border: "1.5px solid #e2e8f0",
+    borderRadius: 10,
+    fontSize: 15,
+    color: "#181a1e",
+    outline: "none",
+    background: "#fff",
+    marginTop: 6,
+    boxSizing: "border-box",
+};
+
+const labelStyle = {
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#4e545f",
+    textTransform: "uppercase",
+    letterSpacing: "0.06em",
+};
 
 const Profile = ({ user }) => {
-    const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
         gender: "",
         bloodType: "",
+        phone: "",
     });
 
-    const navigate = useNavigate();
-
     useEffect(() => {
+        if (!user) return;
         setFormData({
-            name: user.name,
-            email: user.email,
-            gender: user.gender,
-            bloodType: user.bloodType,
+            name: user.name || "",
+            email: user.email || "",
+            gender: user.gender || "",
+            bloodType: user.bloodType || "",
+            phone: user.phone || "",
         });
     }, [user]);
 
@@ -29,116 +49,86 @@ const Profile = ({ user }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-
-    const submitHandler = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        setSaving(true);
         try {
             const authToken = localStorage.getItem("token");
             const res = await fetch(`${BASE_URL}/users/${user._id}`, {
-                method: "put",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(formData),
             });
-
-            const { message } = await res.json();
-
-            if (!res.ok) {
-                throw new Error(message);
-            }
-
-            setLoading(false);
-            toast.success(message);
-            navigate("/users/profile/me");
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.message);
+            toast.success("Profile updated successfully!");
         } catch (err) {
-            toast.error(err.message);
-            setLoading(false);
+            toast.error(err.message || "Failed to update profile");
+        } finally {
+            setSaving(false);
         }
     };
 
     return (
-        <div className="mt-10">
+        <div style={{ background: "#fff", borderRadius: 16, border: "1.5px solid #eaeff6", padding: "28px", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#181a1e", marginBottom: 24 }}>Profile Settings</h2>
+
             <form onSubmit={submitHandler}>
-                <div className="mb-5">
-                    <input
-                        type="text"
-                        placeholder="Full Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
-                        required
-                    />
-                </div>
-                <div className="mb-5">
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
-                        aria-readonly
-                        readOnly
-                    />
-                </div>
-                <div className="mb-5">
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
-                    />
-                </div>
-                <div className="mb-5">
-                    <input
-                        type="text"
-                        placeholder="Blood Type"
-                        name="bloodType"
-                        value={formData.bloodType}
-                        onChange={handleInputChange}
-                        className="w-full pr-4 py-3 border-b border-solid border-[#0066ff61] focus:outline-none focus:border-b-primaryColor text-[16px] leading-7 text-headingColor placeholder:text-textColor cursor-pointer"
-                        required
-                    />
+                <div style={{ marginBottom: 16 }}>
+                    <p style={labelStyle}>Full Name *</p>
+                    <input style={inputStyle} type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Your full name" required />
                 </div>
 
-                <div className="mb-5 flex items-center justify-between">
-                    <label className="text-headingColor font-bold text-[16px] leading-7">
-                        Gender:
-                        <select
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleInputChange}
-                            className="text-textColor font-semibold text-[15px] leading-7 px-4 py-3 focus:outline-none"
-                        >
-                            <option value="">Select</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </label>
+                <div style={{ marginBottom: 16 }}>
+                    <p style={labelStyle}>Email</p>
+                    <input style={{ ...inputStyle, background: "#f8faff", color: "#8a97aa" }} type="email" name="email" value={formData.email} readOnly />
                 </div>
 
-
-                <div className="mt-7">
-                    <button
-                        disabled={loading && true}
-                        type="submit"
-                        className="w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3"
-                    >
-                        {loading ? (
-                            <HashLoader size={25} color="#ffffff" />
-                        ) : (
-                            "Update Profile"
-                        )}
-                    </button>
+                <div style={{ marginBottom: 16 }}>
+                    <p style={labelStyle}>Phone</p>
+                    <input style={inputStyle} type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Phone number" />
                 </div>
+
+                <div style={{ marginBottom: 16 }}>
+                    <p style={labelStyle}>New Password</p>
+                    <input style={inputStyle} type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="Leave blank to keep current" />
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                    <p style={labelStyle}>Blood Type</p>
+                    <input style={inputStyle} type="text" name="bloodType" value={formData.bloodType} onChange={handleInputChange} placeholder="e.g. O+" />
+                </div>
+
+                <div style={{ marginBottom: 24 }}>
+                    <p style={labelStyle}>Gender</p>
+                    <select style={inputStyle} name="gender" value={formData.gender} onChange={handleInputChange}>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={saving}
+                    style={{
+                        width: "100%",
+                        background: saving ? "#6b7280" : "#0067ff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 12,
+                        padding: "14px 0",
+                        fontSize: 16,
+                        fontWeight: 700,
+                        cursor: saving ? "not-allowed" : "pointer",
+                    }}
+                >
+                    {saving ? "Saving…" : "💾 Save Profile"}
+                </button>
             </form>
         </div>
     );

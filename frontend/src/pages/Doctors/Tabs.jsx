@@ -1,14 +1,42 @@
 import { useContext } from "react";
 import { authContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
+import { toast } from "react-toastify";
 
-const Tabs = ({ tab, setTab }) => {
+const Tabs = ({ tab, setTab, doctorId }) => {
     const { dispatch } = useContext(authContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
         dispatch({ type: "LOGOUT" });
         navigate("/");
+    };
+
+    const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete your doctor account? This action cannot be undone.");
+        if (!confirmDelete) return;
+
+        try {
+            const res = await fetch(`${BASE_URL}/doctors/${doctorId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+
+            dispatch({ type: "LOGOUT" });
+            toast.success(result.message);
+            navigate("/");
+        } catch (err) {
+            toast.error(err.message);
+        }
     };
 
     const tabStyle = (name) => ({
@@ -72,6 +100,7 @@ const Tabs = ({ tab, setTab }) => {
                     Logout
                 </button>
                 <button
+                    onClick={handleDeleteAccount}
                     style={{
                         width: "100%",
                         background: "#ef4444",

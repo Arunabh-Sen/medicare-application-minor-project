@@ -30,7 +30,7 @@ const Dashboard = () => {
                         className="doc__dashboard__grid"
                     >
                         {/* Sidebar Tabs */}
-                        <Tabs tab={tab} setTab={setTab} />
+                        <Tabs tab={tab} setTab={setTab} doctorId={data._id} />
 
                         {/* Main Content */}
                         <div>
@@ -123,7 +123,7 @@ const Dashboard = () => {
                                 )}
 
                                 {tab === "appointments" && (
-                                    <Appointments appointments={data.appointments} />
+                                    <Appointments />
                                 )}
 
                                 {tab === "settings" && <Profile doctorData={data} />}

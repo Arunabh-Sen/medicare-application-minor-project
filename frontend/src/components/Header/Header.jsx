@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import logo from "../../assets/images/logo.png";
-import userImg from "../../assets/images/avatar-icon.png";
 import { NavLink, Link } from "react-router-dom";
 import { BiMenu } from "react-icons/bi";
+import { authContext } from "../../context/AuthContext";
 
 const navLinks = [
   { path: "/home", display: "Home" },
@@ -14,6 +14,7 @@ const navLinks = [
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
+  const { user, role, token } = useContext(authContext);
 
   // Sticky header
   const handleStickyHeader = () => {
@@ -73,36 +74,43 @@ const Header = () => {
 
         {/* Right side */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Link to="/">
-            <img
-              src={userImg}
-              alt=""
-              className="hidden"
-              style={{
-                height: "36px",
-                width: "36px",
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-            />
-          </Link>
-
-          <Link to="/login">
-            <button
-              style={{
-                backgroundColor: "#0067ff",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: "600",
-                padding: "10px 25px",
-                borderRadius: "50px",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Login
-            </button>
-          </Link>
+          {token && user ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <Link to={`${role === "doctor" ? "/doctors/profile/me" : "/users/profile/me"}`}>
+                <button
+                  style={{
+                    backgroundColor: "#0067ff",
+                    color: "white",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    padding: "10px 25px",
+                    borderRadius: "50px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Dashboard
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <Link to="/login">
+              <button
+                style={{
+                  backgroundColor: "#0067ff",
+                  color: "white",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  padding: "10px 25px",
+                  borderRadius: "50px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Login
+              </button>
+            </Link>
+          )}
 
           <span className="md:hidden" onClick={toggleMenu}>
             <BiMenu className="w-6 h-6 cursor-pointer" />

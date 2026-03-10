@@ -8,77 +8,111 @@ import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "./DoctorAbout";
 import Profile from "./Profile";
 import Appointments from "./Appointments";
+import { FaUserMd } from "react-icons/fa";
 
 const Dashboard = () => {
     const { data, loading, error } = useFetchData(`${BASE_URL}/doctors/profile/me`);
     const [tab, setTab] = useState("overview");
 
     return (
-        <section>
-            <div className="max-w-[1170px] px-5 mx-auto">
+        <section style={{ padding: "60px 0", background: "#f8faff", minHeight: "70vh" }}>
+            <div className="container">
                 {loading && !error && <Loader />}
                 {error && !loading && <Error />}
 
                 {!loading && !error && (
-                    <div className="grid lg:grid-cols-3 gap-[30px] lg:gap-[50px]">
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "260px 1fr",
+                        gap: "36px",
+                        alignItems: "start",
+                    }}
+                        className="doc__dashboard__grid"
+                    >
+                        {/* Sidebar Tabs */}
                         <Tabs tab={tab} setTab={setTab} />
-                        <div className="lg:col-span-2">
-                            {data.isApproved === "pending" && (
-                                <div className="flex p-4 mb-4 text-yellow-800 bg-yellow-50 rounded-lg">
-                                    <svg
-                                        aria-hidden="true"
-                                        className="flex-shrink-0 w-5 h-5"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                            clipRule="evenodd"
-                                        ></path>
-                                    </svg>
 
-                                    <span className="sr-only">Info</span>
-                                    <div className="ml-3 text-sm font-medium">
-                                        To get approval please complete your profile. We&apos;ll
-                                        review manually and approve within 3 days.
-                                    </div>
+                        {/* Main Content */}
+                        <div>
+                            {/* Approval Banner */}
+                            {data.isApproved === "pending" && (
+                                <div style={{
+                                    display: "flex",
+                                    gap: 12,
+                                    alignItems: "flex-start",
+                                    background: "#fef9c3",
+                                    border: "1px solid #fcd34d",
+                                    borderRadius: 12,
+                                    padding: "14px 18px",
+                                    marginBottom: 24,
+                                    color: "#92400e",
+                                    fontSize: 14,
+                                    fontWeight: 500,
+                                }}>
+                                    <span style={{ fontSize: 18 }}>⏳</span>
+                                    <span>To get approval please complete your profile. We'll review manually and approve within 3 days.</span>
                                 </div>
                             )}
 
-                            <div className="mt-8">
+                            {/* Tab Content */}
+                            <div>
                                 {tab === "overview" && (
                                     <div>
-                                        <div className="flex items-center gap-4 mb-10">
-                                            <figure className="max-w-[200px] max-h-[200px]">
-                                                <img src={data?.photo} alt="" className="w-full" />
-                                            </figure>
+                                        {/* Doctor header card */}
+                                        <div style={{
+                                            background: "#fff",
+                                            borderRadius: 20,
+                                            border: "1.5px solid #eaeff6",
+                                            padding: "28px 28px",
+                                            boxShadow: "0 4px 24px rgba(0,0,0,0.05)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 24,
+                                            marginBottom: 28,
+                                        }}>
+                                            {/* Avatar */}
+                                            <div style={{
+                                                width: 80, height: 80,
+                                                borderRadius: "50%",
+                                                background: "linear-gradient(135deg, #c5d8ff, #a0c0ff)",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                fontSize: 36, color: "#0067ff", flexShrink: 0,
+                                            }}>
+                                                <FaUserMd />
+                                            </div>
 
-                                            <div>
-                                                <span className="bg-[#CCF0F3] text-irisBlueColor py-1 px-4 lg:py-2 lg:px-6 rounded text-[12px] leading-4 lg:text-[16px] lg:leading-6 font-semibold">
-                                                    {data.specialization}
-                                                </span>
-
-                                                <h3 className="text-[22px] leading-9 font-bold text-headingColor mt-3">
+                                            <div style={{ flex: 1 }}>
+                                                {data.specialization && (
+                                                    <span style={{
+                                                        display: "inline-block",
+                                                        background: "#e0f2fe",
+                                                        color: "#0369a1",
+                                                        fontSize: 12,
+                                                        fontWeight: 700,
+                                                        letterSpacing: "0.08em",
+                                                        textTransform: "uppercase",
+                                                        padding: "3px 12px",
+                                                        borderRadius: 100,
+                                                        marginBottom: 8,
+                                                    }}>
+                                                        {data.specialization}
+                                                    </span>
+                                                )}
+                                                <h3 style={{ fontSize: 22, fontWeight: 800, color: "#181a1e", marginBottom: 6 }}>
                                                     {data.name}
                                                 </h3>
-
-                                                <div className="flex items-center gap-[6px]">
-                                                    <span className="flex items-center gap-[6px] text-headingColor text-[14px] leading-5 lg:text-[16px] lg:leading-6 font-semibold">
-                                                        <img src={starIcon} alt="" />
-                                                        {data.averageRating}
-                                                    </span>
-                                                    <span className="text-textColor text-[14px] leading-5 lg:text-[16px] lg:leading-6 font-semibold">
-                                                        ({data.totalRating})
-                                                    </span>
+                                                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                                                    <img src={starIcon} alt="" style={{ width: 16 }} />
+                                                    <span style={{ fontWeight: 700, color: "#181a1e" }}>{data.averageRating}</span>
+                                                    <span style={{ color: "#4e545f", fontSize: 14 }}>({data.totalRating} ratings)</span>
                                                 </div>
-
-                                                <p className="text__para font-[15px] lg:max-w-[390px] leading-6">
-                                                    {data?.bio}
-                                                </p>
+                                                {data.bio && (
+                                                    <p style={{ fontSize: 14, color: "#4e545f", lineHeight: 1.6 }}>{data.bio}</p>
+                                                )}
                                             </div>
                                         </div>
+
+                                        {/* About Section */}
                                         <DoctorAbout
                                             name={data.name}
                                             about={data.about}
@@ -91,12 +125,21 @@ const Dashboard = () => {
                                 {tab === "appointments" && (
                                     <Appointments appointments={data.appointments} />
                                 )}
+
                                 {tab === "settings" && <Profile doctorData={data} />}
                             </div>
                         </div>
                     </div>
                 )}
             </div>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .doc__dashboard__grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 };

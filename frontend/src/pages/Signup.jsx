@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import signupImg from '../assets/images/signup.gif'
 import { Link, useNavigate } from 'react-router-dom'
-import uploadImageToCloudinary from '../utils/uploadCloudinary'
 import { BASE_URL } from '../config'
 import { toast } from 'react-toastify'
 import HashLoader from 'react-spinners/HashLoader'
@@ -9,15 +8,12 @@ import useReveal from '../hooks/useReveal'
 
 const Signup = () => {
   useReveal()
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [previewURL, setPreviewURL] = useState('')
   const [loading, setLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    photo: '',
     gender: '',
     role: 'patient',
   })
@@ -28,17 +24,6 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleFileInputChange = async (event) => {
-    const file = event.target.files[0]
-
-    setLoading(true)
-    const data = await uploadImageToCloudinary(file)
-
-    setPreviewURL(data.url)
-    setSelectedFile(data.url)
-    setFormData({ ...formData, photo: data.url })
-    setLoading(false)
-  }
 
   const submitHandler = async (event) => {
     event.preventDefault()
@@ -180,31 +165,6 @@ const Signup = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                {previewURL && (
-                  <div style={{
-                    width: 50, height: 50, borderRadius: '50%',
-                    border: '2px solid #0067ff', overflow: 'hidden', flexShrink: 0,
-                  }}>
-                    <img src={previewURL} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                )}
-                <div style={{ position: 'relative', width: 130, height: 44 }}>
-                  <input type='file' name='photo' id='customFile'
-                    onChange={handleFileInputChange} accept='.jpg,.png'
-                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 20 }}
-                  />
-                  <label htmlFor='customFile' style={{
-                    position: 'absolute', inset: 0,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '14px', fontWeight: 600, color: '#0067ff',
-                    background: 'rgba(0, 103, 255, 0.08)', borderRadius: '10px',
-                    cursor: 'pointer',
-                  }}>
-                    Upload Photo
-                  </label>
-                </div>
-              </div>
 
               <button
                 disabled={loading && true}

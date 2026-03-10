@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
-import uploadImageToCloudinary from "../../utils/uploadCloudinary";
-import { BASE_URL, token } from "../../config";
+import { BASE_URL } from "../../config";
 import { toast } from "react-toastify";
 
 const Profile = ({ doctorData }) => {
@@ -18,7 +17,6 @@ const Profile = ({ doctorData }) => {
         experiences: [],
         timeSlots: [],
         about: "",
-        photo: null,
     });
 
     useEffect(() => {
@@ -34,7 +32,6 @@ const Profile = ({ doctorData }) => {
             experiences: doctorData?.experiences,
             timeSlots: doctorData?.timeSlots,
             about: doctorData?.about,
-            photo: doctorData?.photo,
         });
     }, [doctorData]);
 
@@ -42,21 +39,17 @@ const Profile = ({ doctorData }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleFileInputChange = async (event) => {
-        const file = event.target.files[0];
-        const data = await uploadImageToCloudinary(file);
-        setFormData({ ...formData, photo: data?.url });
-    };
 
     const updateProfileHandler = async (e) => {
         e.preventDefault();
 
         try {
+            const authToken = localStorage.getItem("token");
             const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
                 method: "PUT",
                 headers: {
                     "content-type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(formData),
             });
@@ -460,34 +453,6 @@ const Profile = ({ doctorData }) => {
                     ></textarea>
                 </div>
 
-                <div className="mb-5 flex items-center gap-3">
-                    {formData.photo && (
-                        <figure className="w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor flex items-center justify-center">
-                            <img
-                                src={formData.photo}
-                                alt=""
-                                className="w-full rounded-full"
-                            />
-                        </figure>
-                    )}
-
-                    <div className="relative w-[130px] h-[50px]">
-                        <input
-                            type="file"
-                            name="photo"
-                            id="customFile"
-                            onChange={handleFileInputChange}
-                            accept=".jpg, .png"
-                            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                        />
-                        <label
-                            htmlFor="customFile"
-                            className="absolute top-0 left-0 w-full h-full flex items-center px-[0.75rem] py-[0.375rem] text-[15px] leading-6 overflow-hidden bg-[#0066ff46] text-headingColor font-semibold rounded-lg truncate cursor-pointer"
-                        >
-                            Upload Photo
-                        </label>
-                    </div>
-                </div>
 
                 <div className="mt-7">
                     <button

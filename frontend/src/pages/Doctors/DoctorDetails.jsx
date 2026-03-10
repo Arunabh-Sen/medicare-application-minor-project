@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { BsStarFill, BsStar, BsStarHalf, BsCheckCircleFill, BsClock, BsCalendarCheck, BsArrowLeft, BsChatLeftText } from 'react-icons/bs'
 import { FaUserMd } from 'react-icons/fa'
 import { doctorData } from './doctorData'
+import { authContext } from '../../context/AuthContext'
+import { BASE_URL } from '../../config'
 
 /* ── helper: scroll-reveal ── */
 function useReveal(deps = [], selector = '[data-reveal]') {
@@ -84,12 +86,15 @@ const DoctorDetails = () => {
     const navigate = useNavigate()
     const reviewFormRef = useRef(null)
 
+    const { token, role } = useContext(authContext)
     const [activeTab, setActiveTab] = useState('about')
     const [selectedSlot, setSelectedSlot] = useState(null)
     const [ratingValue, setRatingValue] = useState(0)
     const [feedbackText, setFeedbackText] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [bookingSuccess, setBookingSuccess] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const [bookingError, setBookingError] = useState('')
 
     useReveal([activeTab, id])
 
@@ -121,10 +126,55 @@ const DoctorDetails = () => {
         setFeedbackText('')
     }
 
-    const handleBooking = () => {
-        if (!selectedSlot && selectedSlot !== 0) return
-        setBookingSuccess(true)
-        setTimeout(() => setBookingSuccess(false), 3500)
+    const handleBooking = async () => {
+        if (selectedSlot === null) return
+
+        if (!token) {
+            setBookingError('Please log in to book an appointment.')
+            setTimeout(() => setBookingError(''), 3500)
+            return
+        }
+
+        if (role !== 'patient') {
+            setBookingError('Only patients can book appointments.')
+            setTimeout(() => setBookingError(''), 3500)
+            return
+        }
+
+        const slot = doctor.timeSlots[selectedSlot]
+        setBookingLoading(true)
+        setBookingError('')
+
+        try {
+            const res = await fetch(`${BASE_URL}/bookings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    doctorId: String(doctor.id),
+                    doctorName: doctor.name,
+                    doctorSpecialty: doctor.specialty,
+                    ticketPrice: doctor.ticketPrice,
+                    timeSlot: `${slot.day} ${slot.time}`,
+                }),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Failed to book appointment')
+            }
+
+            setBookingSuccess(true)
+            setTimeout(() => setBookingSuccess(false), 3500)
+        } catch (err) {
+            setBookingError(err.message)
+            setTimeout(() => setBookingError(''), 3500)
+        } finally {
+            setBookingLoading(false)
+        }
     }
 
     // 404 state
@@ -341,18 +391,30 @@ const DoctorDetails = () => {
 
                             {/* Book Button */}
                             <button
-                                className={`doc__book__btn${(selectedSlot === null || !doctor.available) ? ' doc__book__btn--disabled' : ''}`}
+                                className={`doc__book__btn${(selectedSlot === null || !doctor.available || bookingLoading) ? ' doc__book__btn--disabled' : ''}`}
                                 onClick={handleBooking}
-                                disabled={selectedSlot === null || !doctor.available}
+                                disabled={selectedSlot === null || !doctor.available || bookingLoading}
                             >
                                 <BsCalendarCheck />
-                                Book Appointment
+                                {bookingLoading ? 'Booking...' : 'Book Appointment'}
                             </button>
 
                             {bookingSuccess && (
                                 <div className="doc__booking__success">
                                     <BsCheckCircleFill />
                                     <span>Appointment booked successfully!</span>
+                                </div>
+                            )}
+
+                            {bookingError && (
+                                <div style={{
+                                    display: 'flex', alignItems: 'center', gap: 8,
+                                    background: '#fef2f2', border: '1px solid #fecaca',
+                                    borderRadius: 10, padding: '10px 14px',
+                                    marginTop: 12, color: '#dc2626', fontSize: 13, fontWeight: 500,
+                                }}>
+                                    <span>⚠️</span>
+                                    <span>{bookingError}</span>
                                 </div>
                             )}
 

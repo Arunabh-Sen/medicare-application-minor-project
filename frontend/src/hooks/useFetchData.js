@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { token } from "../config";
 
 const useFetchData = (url) => {
     const [data, setData] = useState([]);
@@ -11,8 +10,9 @@ const useFetchData = (url) => {
             setLoading(true);
 
             try {
+                const authToken = localStorage.getItem("token");
                 const res = await fetch(url, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${authToken}` },
                 });
 
                 const result = await res.json();

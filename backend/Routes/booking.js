@@ -1,10 +1,20 @@
 import express from "express";
-import { createBooking, getMyBookings } from "../Controllers/bookingController.js";
+import {
+    createBooking,
+    getMyBookings,
+    getDoctorAppointments,
+    updateBookingStatus,
+} from "../Controllers/bookingController.js";
 import { authenticate, restrict } from "../auth/verifyToken.js";
 
 const router = express.Router();
 
+// Patient routes
 router.post("/", authenticate, restrict(["patient"]), createBooking);
 router.get("/my-bookings", authenticate, restrict(["patient"]), getMyBookings);
+
+// Doctor routes
+router.get("/doctor-appointments", authenticate, restrict(["doctor"]), getDoctorAppointments);
+router.put("/:id/status", authenticate, restrict(["doctor"]), updateBookingStatus);
 
 export default router;

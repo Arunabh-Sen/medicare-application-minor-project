@@ -7,13 +7,13 @@ export const updateDoctor = async (req, res) => {
     try {
         const updatedDoctor = await Doctor.findByIdAndUpdate(
             id,
-            { $set: req.body },
+            { $set: { ...req.body, isApproved: "approved" } },
             { new: true }
         );
 
         res.status(200).json({
             success: true,
-            message: "Successfully updated",
+            message: "Successfully updated and approved",
             data: updatedDoctor,
         });
     } catch (err) {
@@ -61,14 +61,14 @@ export const getAllDoctor = async (req, res) => {
 
         if (query) {
             doctors = await Doctor.find({
-                isApproved: "approved",
+                isApproved: { $in: ["approved", "pending"] },
                 $or: [
                     { name: { $regex: query, $options: "i" } },
                     { specialization: { $regex: query, $options: "i" } },
                 ],
             }).select("-password");
         } else {
-            doctors = await Doctor.find({ isApproved: "approved" }).select("-password");
+            doctors = await Doctor.find({ isApproved: { $in: ["approved", "pending"] } }).select("-password");
         }
 
         res.status(200).json({

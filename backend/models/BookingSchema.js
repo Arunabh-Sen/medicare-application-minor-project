@@ -2,10 +2,14 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
-    doctorId: {
-      type: String, // static local ID (1, 2, 3 etc.) from doctorData
-      required: true,
+    // For real DB doctors (seeded or registered)
+    mongoDocId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Doctor",
+      default: null,
     },
+    // For static doctorData fallback (local integer id "1", "2", etc.)
+    doctorId: { type: String, default: null },
     doctorName: { type: String, required: true },
     doctorSpecialty: { type: String },
     user: {
@@ -17,7 +21,7 @@ const bookingSchema = new mongoose.Schema(
     timeSlot: { type: String, required: true },
     status: {
       type: String,
-      enum: ["pending", "approved", "cancelled"],
+      enum: ["pending", "approved", "cancelled", "completed"],
       default: "pending",
     },
     isPaid: {

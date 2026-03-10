@@ -10,19 +10,18 @@ const generateToken = (user) => {
 };
 
 export const register = async (req, res) => {
-    const { email, password, name, role, photo, gender } = req.body;
+    const { email, password, name, role, gender } = req.body;
+    console.log("Register payload:", req.body);
 
     try {
-        let user = null;
-
-        if (role === "patient") {
-            user = await User.findOne({ email });
-        } else if (role === "doctor") {
+        let user = await User.findOne({ email });
+        if (!user) {
             user = await Doctor.findOne({ email });
         }
 
         if (user) {
-            return res.status(400).json({ message: "User already exists" });
+            console.log("Registration failed: User already exists with email:", email);
+            return res.status(400).json({ message: "User already exists with this email. Please use a different one." });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -33,7 +32,6 @@ export const register = async (req, res) => {
                 name,
                 email,
                 password: hashPassword,
-                photo,
                 gender,
                 role,
             });
@@ -44,7 +42,6 @@ export const register = async (req, res) => {
                 name,
                 email,
                 password: hashPassword,
-                photo,
                 gender,
                 role,
             });
@@ -54,7 +51,8 @@ export const register = async (req, res) => {
 
         res.status(200).json({ success: true, message: "User successfully created" });
     } catch (err) {
-        res.status(500).json({ success: false, message: "Internal server error, Try again" });
+        console.error("Register Error:", err);
+        res.status(500).json({ success: false, message: `Internal server error: ${err.message}` });
     }
 };
 

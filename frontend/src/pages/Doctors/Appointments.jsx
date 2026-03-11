@@ -4,10 +4,10 @@ import { FaUserMd, FaCheck, FaClock, FaTimes, FaCheckDouble } from "react-icons/
 import { BsCalendarCheck } from "react-icons/bs";
 
 const statusConfig = {
-    pending: { bg: "#fef9c3", color: "#92400e", label: "Pending", icon: "⏳" },
-    approved: { bg: "#dcfce7", color: "#166534", label: "Approved", icon: "✅" },
-    cancelled: { bg: "#fee2e2", color: "#991b1b", label: "Cancelled", icon: "❌" },
-    completed: { bg: "#e0f2fe", color: "#075985", label: "Completed", icon: "✔" },
+    pending: { bg: "#fef9c3", color: "#92400e", label: "Pending", icon: "" },
+    approved: { bg: "#dcfce7", color: "#166534", label: "Approved", icon: "" },
+    cancelled: { bg: "#fee2e2", color: "#991b1b", label: "Cancelled", icon: "" },
+    completed: { bg: "#e0f2fe", color: "#075985", label: "Completed", icon: "" },
 };
 
 const StatusBadge = ({ status }) => {
@@ -124,10 +124,10 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                     {booking.timeSlot}
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    💰 ₹{booking.ticketPrice}
+                    Ticket Price: ₹{booking.ticketPrice}
                 </span>
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    📅 Booked {new Date(booking.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    Booked {new Date(booking.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 </span>
                 {booking.isPaid && (
                     <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#16a34a", fontWeight: 600 }}>
@@ -258,7 +258,7 @@ const Appointments = () => {
     };
 
     if (loading) return <p style={{ textAlign: "center", color: "#4e545f", paddingTop: 24 }}>Loading appointments…</p>;
-    if (error) return <p style={{ color: "#dc2626", paddingTop: 16 }}>⚠️ {error}</p>;
+    if (error) return <p style={{ color: "#dc2626", paddingTop: 16 }}>Error: {error}</p>;
 
     return (
         <div style={{ marginTop: 8 }}>
@@ -268,7 +268,7 @@ const Appointments = () => {
                     background: "#fff", borderRadius: 16,
                     border: "1.5px solid #eaeff6",
                 }}>
-                    <div style={{ fontSize: 48, marginBottom: 16 }}>📭</div>
+                    <div style={{ fontSize: 48, marginBottom: 16 }}></div>
                     <h3 style={{ fontSize: 18, fontWeight: 700, color: "#181a1e", marginBottom: 8 }}>
                         No Appointments Yet
                     </h3>

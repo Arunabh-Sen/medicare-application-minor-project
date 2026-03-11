@@ -99,7 +99,7 @@ const DbDoctorDetails = () => {
 
     if (error || !doctor) return (
         <section style={{ padding: '80px 20px', textAlign: 'center' }}>
-            <p style={{ color: '#dc2626' }}>⚠️ {error || 'Doctor not found.'}</p>
+            <p style={{ color: '#dc2626' }}>Error: {error || 'Doctor not found.'}</p>
             <button onClick={() => navigate('/doctors')} style={{ marginTop: 16, color: '#0067ff', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
                 ← Back to Doctors
             </button>
@@ -208,7 +208,7 @@ const DbDoctorDetails = () => {
                                     borderRadius: 10, padding: '10px 14px',
                                     marginTop: 12, color: '#dc2626', fontSize: 13, fontWeight: 500,
                                 }}>
-                                    <span>⚠️</span>
+                                    <span></span>
                                     <span>{bookingError}</span>
                                 </div>
                             )}

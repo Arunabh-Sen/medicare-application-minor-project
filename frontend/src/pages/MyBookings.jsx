@@ -88,7 +88,7 @@ const BookingCard = ({ booking, onCancel }) => {
                 <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
-                            <BsClock /> {booking.timeSlot}
+                             {booking.timeSlot}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
                             <BsCalendarCheck /> ₹{booking.ticketPrice} ticket
@@ -143,7 +143,7 @@ const MyBookings = () => {
                     background: "#fff", borderRadius: 16,
                     border: "1.5px solid #eaeff6",
                 }}>
-                    <div style={{ fontSize: 48, marginBottom: 16 }}>📅</div>
+                    <div style={{ fontSize: 48, marginBottom: 16 }}></div>
                     <h3 style={{ fontSize: 18, fontWeight: 700, color: "#181a1e", marginBottom: 8 }}>
                         No Appointments Yet
                     </h3>

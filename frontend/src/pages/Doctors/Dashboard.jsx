@@ -49,7 +49,7 @@ const Dashboard = () => {
                                     fontSize: 14,
                                     fontWeight: 500,
                                 }}>
-                                    <span style={{ fontSize: 18 }}>⏳</span>
+                                    <span style={{ fontSize: 18 }}></span>
                                     <span>To get approval please complete your profile. We'll review manually and approve within 3 days.</span>
                                 </div>
                             )}

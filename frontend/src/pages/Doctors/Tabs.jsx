@@ -69,13 +69,13 @@ const Tabs = ({ tab, setTab, doctorId }) => {
             </p>
 
             <button onClick={() => setTab("overview")} style={tabStyle("overview")}>
-                📋 Overview
+                Overview
             </button>
             <button onClick={() => setTab("appointments")} style={tabStyle("appointments")}>
-                📅 Appointments
+                Appointments
             </button>
             <button onClick={() => setTab("settings")} style={tabStyle("settings")}>
-                ⚙️ Profile Settings
+                Profile Settings
             </button>
 
             <div style={{ marginTop: 40, borderTop: "1.5px solid #eaeff6", paddingTop: 20 }}>

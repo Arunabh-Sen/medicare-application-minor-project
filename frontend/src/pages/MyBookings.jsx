@@ -10,10 +10,35 @@ const statusColors = {
     pending: { bg: "#fef9c3", text: "#92400e", label: "Pending" },
     approved: { bg: "#dcfce7", text: "#166534", label: "Confirmed" },
     cancelled: { bg: "#fee2e2", text: "#991b1b", label: "Cancelled" },
+    completed: { bg: "#e0f2fe", text: "#075985", label: "Completed" },
 };
 
-const BookingCard = ({ booking, onCancel }) => {
+const BookingCard = ({ booking, onCancel, onDelete }) => {
     const [cancelling, setCancelling] = React.useState(false);
+    const [deleting, setDeleting] = React.useState(false);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to remove this appointment from your list?")) return;
+        setDeleting(true);
+        try {
+            const res = await fetch(`${BASE_URL}/bookings/${booking._id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const result = await res.json();
+            if (res.ok) {
+                onDelete(booking._id);
+            } else {
+                alert(result.message || "Failed to remove booking.");
+            }
+        } catch (err) {
+            alert("Error removing booking.");
+        } finally {
+            setDeleting(false);
+        }
+    };
 
     const handleCancel = async () => {
         if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
@@ -118,6 +143,54 @@ const BookingCard = ({ booking, onCancel }) => {
                             {cancelling ? "Cancelling…" : "Cancel Appointment"}
                         </button>
                     )}
+
+                    {booking.status === "cancelled" && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={deleting}
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "#181a1e",
+                                fontSize: 13,
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                padding: "4px 8px",
+                                borderRadius: 6,
+                                transition: "all 0.2s",
+                                textDecoration: "underline",
+                                opacity: deleting ? 0.6 : 1,
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = "#f1f5f9"}
+                            onMouseLeave={e => e.currentTarget.style.background = "none"}
+                        >
+                            {deleting ? "Removing…" : "Remove from List"}
+                        </button>
+                    )}
+
+                    {booking.status === "completed" && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={deleting}
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "#181a1e",
+                                fontSize: 13,
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                padding: "4px 8px",
+                                borderRadius: 6,
+                                transition: "all 0.2s",
+                                textDecoration: "underline",
+                                opacity: deleting ? 0.6 : 1,
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = "#f1f5f9"}
+                            onMouseLeave={e => e.currentTarget.style.background = "none"}
+                        >
+                            {deleting ? "Removing…" : "Remove from List"}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -159,7 +232,7 @@ const MyBookings = () => {
                         {bookings.length} appointment{bookings.length !== 1 ? "s" : ""} booked
                     </h3>
                     {bookings.map((b) => (
-                        <BookingCard key={b._id} booking={b} onCancel={refetch} />
+                        <BookingCard key={b._id} booking={b} onCancel={refetch} onDelete={refetch} />
                     ))}
                 </div>
             )}

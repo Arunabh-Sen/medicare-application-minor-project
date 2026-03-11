@@ -86,3 +86,56 @@ export const updateBookingStatus = async (req, res) => {
         res.status(500).json({ success: false, message: "Failed to update booking status." });
     }
 };
+
+export const cancelBooking = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.userId;
+
+    try {
+        const booking = await Booking.findById(id);
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found." });
+        }
+
+        // Verify this user owns this booking
+        if (booking.user.toString() !== userId.toString()) {
+            return res.status(403).json({ success: false, message: "Not authorized to cancel this booking." });
+        }
+
+        if (booking.status === "cancelled") {
+            return res.status(400).json({ success: false, message: "Booking is already cancelled." });
+        }
+
+        booking.status = "cancelled";
+        await booking.save();
+
+        res.status(200).json({ success: true, message: "Appointment cancelled successfully.", data: booking });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to cancel booking." });
+    }
+};
+
+export const deleteBooking = async (req, res) => {
+    const { id } = req.params;
+    const doctorId = req.userId;
+
+    try {
+        const booking = await Booking.findById(id);
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "Booking not found." });
+        }
+
+        // Verify this doctor owns this booking
+        if (booking.mongoDocId?.toString() !== doctorId.toString()) {
+            return res.status(403).json({ success: false, message: "Not authorized to delete this booking." });
+        }
+
+        await Booking.findByIdAndDelete(id);
+
+        res.status(200).json({ success: true, message: "Booking removed successfully." });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to delete booking." });
+    }
+};

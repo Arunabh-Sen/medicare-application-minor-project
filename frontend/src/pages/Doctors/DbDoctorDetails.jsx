@@ -25,9 +25,19 @@ const DbDoctorDetails = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [selectedSlot, setSelectedSlot] = useState(null)
+    const [bookingDate, setBookingDate] = useState('')
     const [bookingLoading, setBookingLoading] = useState(false)
     const [bookingSuccess, setBookingSuccess] = useState(false)
     const [bookingError, setBookingError] = useState('')
+
+    const getDayName = (dateString) => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const d = new Date(dateString);
+        return days[d.getDay()];
+    }
+
+    const selectedDay = bookingDate ? getDayName(bookingDate) : null;
+    const availableSlots = (doctor && doctor.timeSlots) ? doctor.timeSlots.filter(s => s.day === selectedDay) : [];
 
     useEffect(() => {
         const fetch_ = async () => {
@@ -48,7 +58,7 @@ const DbDoctorDetails = () => {
     }, [id])
 
     const handleBooking = async () => {
-        if (selectedSlot === null) return
+        if (selectedSlot === null || !bookingDate) return
         if (!token) {
             setBookingError('Please log in to book an appointment.')
             setTimeout(() => setBookingError(''), 3500)
@@ -76,7 +86,7 @@ const DbDoctorDetails = () => {
                     doctorName: doctor.name,
                     doctorSpecialty: doctor.specialization,
                     ticketPrice: doctor.ticketPrice,
-                    timeSlot: `${slot.day} ${slot.startingTime} – ${slot.endingTime}`,
+                    timeSlot: `${bookingDate} (${slot.day}) ${slot.startingTime} – ${slot.endingTime}`,
                 }),
             })
             const data = await res.json()
@@ -163,32 +173,76 @@ const DbDoctorDetails = () => {
                                 </span>
                             </div>
 
-                            {doctor.timeSlots?.length > 0 && (
-                                <div className="doc__slots__section">
-                                    <div className="doc__slots__header">
-                                        <BsClock className="doc__slots__icon" />
-                                        <p className="doc__slots__title">Available Time Slots:</p>
-                                    </div>
-                                    <ul className="doc__slots__list">
-                                        {doctor.timeSlots.map((slot, i) => (
-                                            <li
-                                                key={i}
-                                                className={`doc__slot__item${selectedSlot === i ? ' doc__slot__selected' : ''}`}
-                                                onClick={() => setSelectedSlot(i)}
-                                            >
-                                                <span className="doc__slot__day">{slot.day}</span>
-                                                <span className="doc__slot__time">{slot.startingTime} – {slot.endingTime}</span>
-                                                {selectedSlot === i && <BsCheckCircleFill className="doc__slot__check" />}
-                                            </li>
-                                        ))}
-                                    </ul>
+                             <div className="doc__slots__section">
+                                <div className="doc__slots__header">
+                                    <BsClock className="doc__slots__icon" />
+                                    <p className="doc__slots__title">Select Date & Time:</p>
                                 </div>
-                            )}
 
-                            <button
-                                className={`doc__book__btn${(selectedSlot === null || bookingLoading) ? ' doc__book__btn--disabled' : ''}`}
+                                <div style={{ marginBottom: '20px' }}>
+                                    <label className="doc__slots__title" style={{ fontSize: '14px', marginBottom: '8px', display: 'block' }}>
+                                        Appointment Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="form__input"
+                                        value={bookingDate}
+                                        min={new Date().toISOString().split('T')[0]}
+                                        onChange={(e) => {
+                                            setBookingDate(e.target.value)
+                                            setSelectedSlot(null)
+                                        }}
+                                        style={{
+                                            padding: '12px',
+                                            borderRadius: '12px',
+                                            border: '1.5px solid #eaeff6',
+                                            width: '100%',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                </div>
+
+                                {bookingDate && availableSlots.length > 0 && (
+                                    <>
+                                        <p className="doc__slots__title" style={{ fontSize: '14px', marginBottom: '12px' }}>
+                                            Available Slots for {selectedDay}:
+                                        </p>
+                                        <ul className="doc__slots__list">
+                                            {availableSlots.map((slot, i) => (
+                                                <li
+                                                    key={i}
+                                                    className={`doc__slot__item${selectedSlot === i ? ' doc__slot__selected' : ''}`}
+                                                    onClick={() => setSelectedSlot(i)}
+                                                >
+                                                    <span className="doc__slot__day">{slot.day}</span>
+                                                    <span className="doc__slot__time">{slot.startingTime} – {slot.endingTime}</span>
+                                                    {selectedSlot === i && <BsCheckCircleFill className="doc__slot__check" />}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
+
+                                {bookingDate && availableSlots.length === 0 && (
+                                    <div style={{
+                                        background: '#fff7ed',
+                                        border: '1.5px solid #fed7aa',
+                                        borderRadius: '12px',
+                                        padding: '12px',
+                                        color: '#9a3412',
+                                        fontSize: '13px',
+                                        fontWeight: 500,
+                                        marginTop: '10px'
+                                    }}>
+                                        The doctor is not available on {selectedDay}s. Please select another date.
+                                    </div>
+                                )}
+                            </div>
+
+                             <button
+                                className={`doc__book__btn${(selectedSlot === null || !bookingDate || bookingLoading) ? ' doc__book__btn--disabled' : ''}`}
                                 onClick={handleBooking}
-                                disabled={selectedSlot === null || bookingLoading}
+                                disabled={selectedSlot === null || !bookingDate || bookingLoading}
                             >
                                 <BsCalendarCheck />
                                 {bookingLoading ? 'Booking…' : 'Book Appointment'}

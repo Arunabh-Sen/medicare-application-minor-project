@@ -339,7 +339,7 @@ const DoctorDetails = () => {
                                     </button>
 
                                     {submitted && (
-                                        <p className="doc__success__msg">Thank you for your feedback 🎉</p>
+                                        <p className="doc__success__msg">Thank you for your feedback</p>
                                     )}
                                 </form>
                             </div>
@@ -413,7 +413,7 @@ const DoctorDetails = () => {
                                     borderRadius: 10, padding: '10px 14px',
                                     marginTop: 12, color: '#dc2626', fontSize: 13, fontWeight: 500,
                                 }}>
-                                    <span>⚠️</span>
+                                    <span></span>
                                     <span>{bookingError}</span>
                                 </div>
                             )}

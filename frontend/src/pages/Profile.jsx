@@ -65,7 +65,7 @@ const Profile = ({ user }) => {
             });
             const result = await res.json();
             if (!res.ok) throw new Error(result.message);
-            setUpdateStatus({ type: 'success', message: "Profile updated successfully! 🎉" });
+            setUpdateStatus({ type: 'success', message: "Profile updated successfully!" });
         } catch (err) {
             setUpdateStatus({ type: 'error', message: err.message || "Failed to update profile" });
         } finally {
@@ -165,7 +165,7 @@ const Profile = ({ user }) => {
                         cursor: saving ? "not-allowed" : "pointer",
                     }}
                 >
-                    {saving ? "Saving…" : "💾 Save Profile"}
+                    {saving ? "Saving…" : "Save Profile"}
                 </button>
             </form>
         </div>

@@ -25,7 +25,7 @@ export const doctorData = [
             { day: 'Wednesday', time: '4:00 PM – 9:30 PM' },
         ],
         reviews: [
-            { id: 1, name: 'Amit Singh', date: 'Feb 14, 2023', rating: 5, text: 'Good services, highly recommended 👍' },
+            { id: 1, name: 'Amit Singh', date: 'Feb 14, 2023', rating: 5, text: 'Good services, highly recommended' },
             { id: 2, name: 'Sneha Kapoor', date: 'Jan 05, 2023', rating: 4.5, text: 'Very professional doctor. Explained everything clearly.' },
             { id: 3, name: 'Ravi Verma', date: 'Dec 28, 2022', rating: 5, text: 'Excellent experience. Will definitely come back.' },
         ],
@@ -114,7 +114,7 @@ export const doctorData = [
             { day: 'Friday', time: '10:00 AM – 2:00 PM' },
         ],
         reviews: [
-            { id: 1, name: 'Ritika Aggarwal', date: 'Mar 10, 2023', rating: 5, text: 'Best doctor I have ever visited. Very caring and professional. 💯' },
+            { id: 1, name: 'Ritika Aggarwal', date: 'Mar 10, 2023', rating: 5, text: 'Best doctor I have ever visited. Very caring and professional.' },
             { id: 2, name: 'Sunita Mishra', date: 'Feb 28, 2023', rating: 5, text: 'Absolutely wonderful experience throughout my pregnancy.' },
             { id: 3, name: 'Anjali Nair', date: 'Jan 15, 2023', rating: 4.5, text: 'Very thorough and reassuring. Highly recommended!' },
         ],

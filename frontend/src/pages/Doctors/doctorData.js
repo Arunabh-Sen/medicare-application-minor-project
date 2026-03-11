@@ -8,6 +8,7 @@ export const doctorData = [
         ticketPrice: 500,
         currency: 'INR',
         available: true,
+        address: '123 Health St, Sector 5, New Delhi',
         about:
             'Dr. Rahul Sharma is a board-certified surgeon with over 15 years of experience in general and laparoscopic surgery. He is known for his compassionate care and precise surgical technique. He completed his residency at AIIMS Delhi and has authored multiple peer-reviewed papers in surgical innovation.',
         education: [
@@ -39,6 +40,7 @@ export const doctorData = [
         ticketPrice: 600,
         currency: 'INR',
         available: true,
+        address: '45 Cardiac Care Lane, Banjara Hills, Hyderabad',
         about:
             'Dr. Anjali Gupta is a leading cardiologist with 12 years of specialized experience in interventional cardiology. She has treated thousands of patients with heart conditions and is passionate about preventive cardiac care.',
         education: [
@@ -69,6 +71,7 @@ export const doctorData = [
         ticketPrice: 550,
         currency: 'INR',
         available: false,
+        address: '88 Neuro Plaza, Indiranagar, Bangalore',
         about:
             'Dr. Ishaan Malhotra specialises in neurological disorders including epilepsy, Parkinson\'s disease, and stroke management. With 10+ years in neurology, he combines cutting-edge diagnostics with a patient-first approach.',
         education: [
@@ -97,6 +100,7 @@ export const doctorData = [
         ticketPrice: 450,
         currency: 'INR',
         available: true,
+        address: 'Suite 210, Women Care Center, Powai, Mumbai',
         about:
             'Dr. Priya Sharma is one of the most trusted gynecologists in the city with 18 years of experience. She specialises in high-risk pregnancies, infertility treatment, and minimally invasive gynecological surgeries.',
         education: [
@@ -128,6 +132,7 @@ export const doctorData = [
         ticketPrice: 700,
         currency: 'INR',
         available: true,
+        address: '12 Oncology Wing, Apollo City, Chennai',
         about:
             'Dr. Rajesh Iyer is a dedicated oncologist with expertise in medical oncology and chemotherapy management. He provides comprehensive cancer care with a focus on quality of life and personalised treatment plans.',
         education: [
@@ -156,6 +161,7 @@ export const doctorData = [
         ticketPrice: 400,
         currency: 'INR',
         available: false,
+        address: 'Skin & Glow Clinic, MG Road, Pune',
         about:
             'Dr. Sunita Deshmukh is an expert dermatologist with 9 years of experience treating skin, hair, and nail conditions. She has a special interest in cosmetic dermatology and acne management.',
         education: [
@@ -184,6 +190,7 @@ export const doctorData = [
         ticketPrice: 500,
         currency: 'INR',
         available: true,
+        address: 'Joint & Bone Center, Satellite Area, Ahmedabad',
         about:
             'Dr. Tanmay Bhatt is an orthopedic surgeon specializing in joint replacement, sports injuries, and spine surgery. He has performed over 1,000 successful orthopedic surgeries throughout his career.',
         education: [
@@ -213,6 +220,7 @@ export const doctorData = [
         ticketPrice: 480,
         currency: 'INR',
         available: true,
+        address: 'Mind Space Tower, Salt Lake, Kolkata',
         about:
             'Dr. Shalini Kulkarni is a compassionate psychiatrist with expertise in anxiety, depression, OCD, and adolescent mental health. She believes in a holistic, evidence-based approach to mental wellness.',
         education: [

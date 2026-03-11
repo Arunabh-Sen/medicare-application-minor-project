@@ -378,6 +378,25 @@ const DoctorDetails = () => {
                                 </span>
                             </div>
 
+                            {/* Clinic Address Display */}
+                            {doctor.address && (
+                                <div style={{ 
+                                    background: '#f8faff', 
+                                    border: '1.5px solid #eaeff6', 
+                                    borderRadius: '12px', 
+                                    padding: '12px 14px',
+                                    marginBottom: 4,
+                                    marginTop: 18
+                                }}>
+                                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1724', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                        Clinic Location
+                                    </p>
+                                    <p style={{ fontSize: '14px', color: '#5a657a', lineHeight: 1.5 }}>
+                                        {doctor.address}
+                                    </p>
+                                </div>
+                            )}
+
                             {/* Time Slots */}
                             <div className="doc__slots__section">
                                 <div className="doc__slots__header">

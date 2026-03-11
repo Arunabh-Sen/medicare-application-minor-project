@@ -98,6 +98,7 @@ const Profile = ({ doctorData }) => {
         experiences: [],
         timeSlots: [],
         about: "",
+        address: "",
     });
     const [saving, setSaving] = useState(false);
     const [updateStatus, setUpdateStatus] = useState({ type: 'idle', message: '' });
@@ -116,6 +117,7 @@ const Profile = ({ doctorData }) => {
             experiences: doctorData.experiences || [],
             timeSlots: doctorData.timeSlots || [],
             about: doctorData.about || "",
+            address: doctorData.address || "",
         });
     }, [doctorData]);
 
@@ -244,6 +246,19 @@ const Profile = ({ doctorData }) => {
                         onChange={handleInputChange}
                         placeholder="Write a detailed description about your practice…"
                         style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+                    />
+                </div>
+
+                {/* Clinic Address */}
+                <div style={{ marginTop: 16 }}>
+                    <p style={labelStyle}>Clinic Address</p>
+                    <input
+                        style={inputStyle}
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        placeholder="e.g. 123 Health St, Sector 5, New Delhi"
                     />
                 </div>
 

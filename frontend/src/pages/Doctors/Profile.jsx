@@ -100,6 +100,7 @@ const Profile = ({ doctorData }) => {
         about: "",
     });
     const [saving, setSaving] = useState(false);
+    const [updateStatus, setUpdateStatus] = useState({ type: 'idle', message: '' });
 
     useEffect(() => {
         if (!doctorData) return;
@@ -125,6 +126,7 @@ const Profile = ({ doctorData }) => {
     const updateProfileHandler = async (e) => {
         e.preventDefault();
         setSaving(true);
+        setUpdateStatus({ type: 'idle', message: '' });
         try {
             const authToken = localStorage.getItem("token");
             const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
@@ -137,8 +139,10 @@ const Profile = ({ doctorData }) => {
             });
             const result = await res.json();
             if (!res.ok) throw new Error(result.message);
+            setUpdateStatus({ type: 'success', message: "Profile updated successfully!" });
             toast.success("Profile updated successfully!");
         } catch (err) {
+            setUpdateStatus({ type: 'error', message: err.message || "Failed to update profile" });
             toast.error(err.message || "Failed to update profile");
         } finally {
             setSaving(false);
@@ -327,6 +331,44 @@ const Profile = ({ doctorData }) => {
                     </div>
                 ))}
                 <button style={addBtnStyle} onClick={addTimeSlot}><FiPlus /> Add Time Slot</button>
+
+                {/* Status Message */}
+                {updateStatus.type !== 'idle' && (
+                    <div style={{
+                        marginTop: 24,
+                        padding: '12px 16px',
+                        borderRadius: 12,
+                        fontSize: 14,
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        background: updateStatus.type === 'success' ? '#f0fdf4' : '#fff1f2',
+                        color: updateStatus.type === 'success' ? '#166534' : '#991b1b',
+                        border: `1.5px solid ${updateStatus.type === 'success' ? '#bbf7d0' : '#fecdd3'}`,
+                        animation: 'fadeInUp 0.3s ease-out'
+                    }}>
+                        {updateStatus.type === 'success' ? (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        ) : (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        )}
+                        <span>{updateStatus.message}</span>
+                        <style>{`
+                            @keyframes fadeInUp {
+                                from { opacity: 0; transform: translateY(10px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
+                        `}</style>
+                    </div>
+                )}
 
                 {/* ── Save Button ── */}
                 <div style={{ marginTop: 36 }}>

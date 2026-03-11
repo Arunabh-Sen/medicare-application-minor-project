@@ -46,7 +46,7 @@ const Signup = () => {
 
       setLoading(false)
       toast.success(message)
-      navigate('/login')
+      navigate('/login', { state: { successMessage: "Registration successful. Please login to proceed" } })
 
     } catch (err) {
       toast.error(err.message)

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { BASE_URL } from '../config.js'
 import { authContext } from '../context/AuthContext.jsx'
 import { toast } from 'react-toastify'
@@ -16,7 +16,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const location = useLocation()
   const { dispatch } = useContext(authContext)
+
+  const successMessage = location.state?.successMessage
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -128,6 +131,35 @@ const Login = () => {
         </h3>
 
         <form onSubmit={submitHandler}>
+          {successMessage && (
+            <div style={{
+              background: '#f0fdf4',
+              border: '1.5px solid #bbf7d0',
+              color: '#166534',
+              padding: '12px 18px',
+              borderRadius: '16px',
+              fontSize: '14px',
+              fontWeight: 600,
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              animation: 'fadeInDown 0.4s ease-out both',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>{successMessage}</span>
+              <style>{`
+                @keyframes fadeInDown {
+                  from { opacity: 0; transform: translateY(-10px); }
+                  to { opacity: 1; transform: translateY(0); }
+                }
+              `}</style>
+            </div>
+          )}
+
           <div style={{ marginBottom: '20px' }}>
             <label className='form__label'>Email Address</label>
             <input

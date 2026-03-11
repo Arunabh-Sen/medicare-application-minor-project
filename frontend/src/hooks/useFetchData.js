@@ -1,41 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const useFetchData = (url) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
-            try {
-                const authToken = localStorage.getItem("token");
-                const res = await fetch(url, {
-                    headers: { Authorization: `Bearer ${authToken}` },
-                });
+        try {
+            const authToken = localStorage.getItem("token");
+            const res = await fetch(url, {
+                headers: { Authorization: `Bearer ${authToken}` },
+            });
 
-                const result = await res.json();
+            const result = await res.json();
 
-                if (!res.ok) {
-                    throw new Error(result.message + " 🤢");
-                }
-
-                setData(result.data);
-                setLoading(false);
-            } catch (err) {
-                setLoading(false);
-                setError(err.message);
+            if (!res.ok) {
+                throw new Error(result.message || "Failed to fetch data");
             }
-        };
 
-        fetchData();
+            setData(result.data);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            setError(err.message);
+        }
     }, [url]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    const refetch = () => {
+        fetchData();
+    };
 
     return {
         data,
         loading,
         error,
+        refetch,
     };
 };
 

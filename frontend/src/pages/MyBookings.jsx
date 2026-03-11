@@ -12,7 +12,32 @@ const statusColors = {
     cancelled: { bg: "#fee2e2", text: "#991b1b", label: "Cancelled" },
 };
 
-const BookingCard = ({ booking }) => {
+const BookingCard = ({ booking, onCancel }) => {
+    const [cancelling, setCancelling] = React.useState(false);
+
+    const handleCancel = async () => {
+        if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
+        setCancelling(true);
+        try {
+            const res = await fetch(`${BASE_URL}/bookings/${booking._id}/cancel`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const result = await res.json();
+            if (res.ok) {
+                onCancel();
+            } else {
+                alert(result.message || "Failed to cancel booking.");
+            }
+        } catch (err) {
+            alert("Error cancelling booking.");
+        } finally {
+            setCancelling(false);
+        }
+    };
+
     const status = statusColors[booking.status] || statusColors.pending;
 
     return (
@@ -60,13 +85,39 @@ const BookingCard = ({ booking }) => {
                     </span>
                 </div>
 
-                <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 16 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
-                        <BsClock /> {booking.timeSlot}
+                <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: 16 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
+                            <BsClock /> {booking.timeSlot}
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
+                            <BsCalendarCheck /> ₹{booking.ticketPrice} ticket
+                        </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
-                        <BsCalendarCheck /> ₹{booking.ticketPrice} ticket
-                    </div>
+
+                    {(booking.status === "pending" || booking.status === "approved") && (
+                        <button
+                            onClick={handleCancel}
+                            disabled={cancelling}
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "#ef4444",
+                                fontSize: 13,
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                padding: "4px 8px",
+                                borderRadius: 6,
+                                transition: "all 0.2s",
+                                textDecoration: "underline",
+                                opacity: cancelling ? 0.6 : 1,
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = "#fee2e2"}
+                            onMouseLeave={e => e.currentTarget.style.background = "none"}
+                        >
+                            {cancelling ? "Cancelling…" : "Cancel Appointment"}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -78,6 +129,7 @@ const MyBookings = () => {
         data: bookings,
         loading,
         error,
+        refetch,
     } = useFetchData(`${BASE_URL}/bookings/my-bookings`);
 
     return (
@@ -107,7 +159,7 @@ const MyBookings = () => {
                         {bookings.length} appointment{bookings.length !== 1 ? "s" : ""} booked
                     </h3>
                     {bookings.map((b) => (
-                        <BookingCard key={b._id} booking={b} />
+                        <BookingCard key={b._id} booking={b} onCancel={refetch} />
                     ))}
                 </div>
             )}

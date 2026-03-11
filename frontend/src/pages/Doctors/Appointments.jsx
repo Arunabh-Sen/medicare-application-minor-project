@@ -24,8 +24,32 @@ const StatusBadge = ({ status }) => {
     );
 };
 
-const AppointmentCard = ({ booking, onStatusChange }) => {
+const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
     const [updating, setUpdating] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to remove this appointment from your list?")) return;
+        setDeleting(true);
+        try {
+            const res = await fetch(`${BASE_URL}/bookings/${booking._id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            const data = await res.json();
+            if (data.success) {
+                onDelete(booking._id);
+            } else {
+                alert(data.message || "Failed to delete booking.");
+            }
+        } catch {
+            alert("Network error while deleting booking.");
+        } finally {
+            setDeleting(false);
+        }
+    };
 
     const changeStatus = async (newStatus) => {
         if (updating) return;
@@ -166,17 +190,33 @@ const AppointmentCard = ({ booking, onStatusChange }) => {
                 {booking.status !== "cancelled" && (
                     <button
                         onClick={() => changeStatus("cancelled")}
-                        disabled={updating}
+                        disabled={updating || deleting}
                         style={{
                             display: "flex", alignItems: "center", gap: 6,
                             padding: "8px 16px", borderRadius: 8,
                             background: "#fee2e2", color: "#991b1b",
                             border: "1px solid #fca5a5",
                             fontWeight: 600, fontSize: 13, cursor: "pointer",
-                            opacity: updating ? 0.6 : 1,
+                            opacity: (updating || deleting) ? 0.6 : 1,
                         }}
                     >
                         <FaTimes /> Cancel
+                    </button>
+                )}
+                {(booking.status === "cancelled" || booking.status === "completed") && (
+                    <button
+                        onClick={handleDelete}
+                        disabled={updating || deleting}
+                        style={{
+                            display: "flex", alignItems: "center", gap: 6,
+                            padding: "8px 16px", borderRadius: 8,
+                            background: "#181a1e", color: "#fff",
+                            border: "1px solid #181a1e",
+                            fontWeight: 600, fontSize: 13, cursor: "pointer",
+                            opacity: (updating || deleting) ? 0.6 : 1,
+                        }}
+                    >
+                        <FaTimes /> {deleting ? "Removing..." : "Remove from List"}
                     </button>
                 )}
             </div>
@@ -213,6 +253,10 @@ const Appointments = () => {
         );
     };
 
+    const handleDelete = (bookingId) => {
+        setAppointments((prev) => prev.filter((a) => a._id !== bookingId));
+    };
+
     if (loading) return <p style={{ textAlign: "center", color: "#4e545f", paddingTop: 24 }}>Loading appointments…</p>;
     if (error) return <p style={{ color: "#dc2626", paddingTop: 16 }}>⚠️ {error}</p>;
 
@@ -242,6 +286,7 @@ const Appointments = () => {
                             key={appt._id}
                             booking={appt}
                             onStatusChange={handleStatusChange}
+                            onDelete={handleDelete}
                         />
                     ))}
                 </div>

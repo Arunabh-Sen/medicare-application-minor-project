@@ -92,14 +92,24 @@ const DoctorDetails = () => {
     const [ratingValue, setRatingValue] = useState(0)
     const [feedbackText, setFeedbackText] = useState('')
     const [submitted, setSubmitted] = useState(false)
+    const [bookingDate, setBookingDate] = useState('')
     const [bookingSuccess, setBookingSuccess] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
     const [bookingError, setBookingError] = useState('')
 
-    useReveal([activeTab, id])
-
     // Find the matching doctor
     const doctor = doctorData.find((d) => d.id === parseInt(id))
+
+    const getDayName = (dateString) => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const d = new Date(dateString);
+        return days[d.getDay()];
+    }
+
+    const selectedDay = bookingDate ? getDayName(bookingDate) : null;
+    const availableSlots = doctor ? doctor.timeSlots.filter(s => s.day === selectedDay) : [];
+
+    useReveal([activeTab, id])
 
     // Reset slot when switching doctors
     useEffect(() => {
@@ -127,7 +137,7 @@ const DoctorDetails = () => {
     }
 
     const handleBooking = async () => {
-        if (selectedSlot === null) return
+        if (selectedSlot === null || !bookingDate) return
 
         if (!token) {
             setBookingError('Please log in to book an appointment.')
@@ -141,7 +151,7 @@ const DoctorDetails = () => {
             return
         }
 
-        const slot = doctor.timeSlots[selectedSlot]
+        const slot = availableSlots[selectedSlot]
         setBookingLoading(true)
         setBookingError('')
 
@@ -157,7 +167,7 @@ const DoctorDetails = () => {
                     doctorName: doctor.name,
                     doctorSpecialty: doctor.specialty,
                     ticketPrice: doctor.ticketPrice,
-                    timeSlot: `${slot.day} ${slot.time}`,
+                    timeSlot: `${bookingDate} (${slot.day}) ${slot.time}`,
                 }),
             })
 
@@ -372,21 +382,67 @@ const DoctorDetails = () => {
                             <div className="doc__slots__section">
                                 <div className="doc__slots__header">
                                     <BsClock className="doc__slots__icon" />
-                                    <p className="doc__slots__title">Available Time Slots:</p>
+                                    <p className="doc__slots__title">Select Date & Time:</p>
                                 </div>
-                                <ul className="doc__slots__list">
-                                    {doctor.timeSlots.map((slot, i) => (
-                                        <li
-                                            key={i}
-                                            className={`doc__slot__item${selectedSlot === i ? ' doc__slot__selected' : ''}`}
-                                            onClick={() => setSelectedSlot(i)}
-                                        >
-                                            <span className="doc__slot__day">{slot.day}</span>
-                                            <span className="doc__slot__time">{slot.time}</span>
-                                            {selectedSlot === i && <BsCheckCircleFill className="doc__slot__check" />}
-                                        </li>
-                                    ))}
-                                </ul>
+
+                                <div style={{ marginBottom: '20px' }}>
+                                    <label className="doc__slots__title" style={{ fontSize: '14px', marginBottom: '8px', display: 'block' }}>
+                                        Appointment Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        className="form__input"
+                                        value={bookingDate}
+                                        min={new Date().toISOString().split('T')[0]}
+                                        onChange={(e) => {
+                                            setBookingDate(e.target.value)
+                                            setSelectedSlot(null)
+                                        }}
+                                        style={{
+                                            padding: '12px',
+                                            borderRadius: '12px',
+                                            border: '1.5px solid #eaeff6',
+                                            width: '100%',
+                                            cursor: 'pointer'
+                                        }}
+                                    />
+                                </div>
+
+                                {bookingDate && availableSlots.length > 0 && (
+                                    <>
+                                        <p className="doc__slots__title" style={{ fontSize: '14px', marginBottom: '12px' }}>
+                                            Available Slots for {selectedDay}:
+                                        </p>
+                                        <ul className="doc__slots__list">
+                                            {availableSlots.map((slot, i) => (
+                                                <li
+                                                    key={i}
+                                                    className={`doc__slot__item${selectedSlot === i ? ' doc__slot__selected' : ''}`}
+                                                    onClick={() => setSelectedSlot(i)}
+                                                >
+                                                    <span className="doc__slot__day">{slot.day}</span>
+                                                    <span className="doc__slot__time">{slot.time}</span>
+                                                    {selectedSlot === i && <BsCheckCircleFill className="doc__slot__check" />}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
+
+                                {bookingDate && availableSlots.length === 0 && (
+                                    <div style={{
+                                        background: '#fff7ed',
+                                        border: '1.5px solid #fed7aa',
+                                        borderRadius: '12px',
+                                        padding: '12px',
+                                        color: '#9a3412',
+                                        fontSize: '13px',
+                                        fontWeight: 500,
+                                        marginTop: '10px'
+                                    }}>
+                                        The doctor is not available on {selectedDay}s. Please select another date.
+                                    </div>
+                                )}
                             </div>
 
                             {/* Book Button */}

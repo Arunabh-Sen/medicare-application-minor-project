@@ -14,6 +14,7 @@ const Login = () => {
   })
 
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
   const { dispatch } = useContext(authContext)
 
@@ -24,6 +25,7 @@ const Login = () => {
   const submitHandler = async (event) => {
     event.preventDefault()
     setLoading(true)
+    setError(null)
 
     try {
       const res = await fetch(`${BASE_URL}/auth/login`, {
@@ -59,6 +61,7 @@ const Login = () => {
       }
 
     } catch (err) {
+      setError(err.message)
       toast.error(err.message)
       setLoading(false)
     }
@@ -150,6 +153,38 @@ const Login = () => {
               required
             />
           </div>
+
+          {error && (
+            <div style={{
+              background: '#fff5f5',
+              border: '1.5px solid #feb2b2',
+              color: '#c53030',
+              padding: '12px 18px',
+              borderRadius: '16px',
+              fontSize: '14px',
+              fontWeight: 600,
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              animation: 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>{error}</span>
+              <style>{`
+                @keyframes shake {
+                  10%, 90% { transform: translate3d(-1px, 0, 0); }
+                  20%, 80% { transform: translate3d(2px, 0, 0); }
+                  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+                  40%, 60% { transform: translate3d(4px, 0, 0); }
+                }
+              `}</style>
+            </div>
+          )}
 
           <div style={{ marginTop: '32px' }}>
             <button

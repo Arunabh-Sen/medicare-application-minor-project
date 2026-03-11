@@ -118,7 +118,7 @@ export const cancelBooking = async (req, res) => {
 
 export const deleteBooking = async (req, res) => {
     const { id } = req.params;
-    const doctorId = req.userId;
+    const requesterId = req.userId;
 
     try {
         const booking = await Booking.findById(id);
@@ -127,8 +127,11 @@ export const deleteBooking = async (req, res) => {
             return res.status(404).json({ success: false, message: "Booking not found." });
         }
 
-        // Verify this doctor owns this booking
-        if (booking.mongoDocId?.toString() !== doctorId.toString()) {
+        // Verify if the requester is either the doctor or the patient of this booking
+        const isDoctor = booking.mongoDocId?.toString() === requesterId.toString();
+        const isPatient = booking.user.toString() === requesterId.toString();
+
+        if (!isDoctor && !isPatient) {
             return res.status(403).json({ success: false, message: "Not authorized to delete this booking." });
         }
 

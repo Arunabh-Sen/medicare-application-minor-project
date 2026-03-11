@@ -15,10 +15,10 @@ const router = express.Router();
 router.post("/", authenticate, restrict(["patient"]), createBooking);
 router.get("/my-bookings", authenticate, restrict(["patient"]), getMyBookings);
 router.put("/:id/cancel", authenticate, restrict(["patient"]), cancelBooking);
+router.delete("/:id", authenticate, restrict(["patient", "doctor"]), deleteBooking);
 
 // Doctor routes
 router.get("/doctor-appointments", authenticate, restrict(["doctor"]), getDoctorAppointments);
 router.put("/:id/status", authenticate, restrict(["doctor"]), updateBookingStatus);
-router.delete("/:id", authenticate, restrict(["doctor"]), deleteBooking);
 
 export default router;

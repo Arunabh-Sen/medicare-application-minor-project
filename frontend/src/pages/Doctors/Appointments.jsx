@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BASE_URL } from "../../config";
-import { FaUserMd, FaCheck, FaClock, FaTimes, FaCheckDouble } from "react-icons/fa";
+import { FaUserMd, FaCheck, FaClock, FaTimes, FaCheckDouble, FaFileInvoice } from "react-icons/fa";
 import { BsCalendarCheck } from "react-icons/bs";
 
 const statusConfig = {
@@ -29,6 +29,7 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
     const [deleting, setDeleting] = useState(false);
 
     const handleDelete = async () => {
+
         if (!window.confirm("Are you sure you want to remove this appointment from your list?")) return;
         setDeleting(true);
         try {
@@ -129,10 +130,15 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     Booked {new Date(booking.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                 </span>
-                {booking.isPaid && (
+                {booking.isPaid ? (
                     <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#16a34a", fontWeight: 600 }}>
                         <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
                         Paid
+                    </span>
+                ) : (
+                    <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#dc2626", fontWeight: 600 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
+                        Not Paid
                     </span>
                 )}
             </div>

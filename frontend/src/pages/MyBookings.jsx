@@ -3,7 +3,7 @@ import useFetchData from "../hooks/useFetchData";
 import { BASE_URL } from "../config";
 import Loading from "../components/Loader/Loading";
 import Error from "../components/Error/Error";
-import { FaUserMd } from "react-icons/fa";
+import { FaUserMd, FaFileInvoice } from "react-icons/fa";
 import { BsCalendarCheck, BsClock } from "react-icons/bs";
 
 const statusColors = {
@@ -16,6 +16,33 @@ const statusColors = {
 const BookingCard = ({ booking, onCancel, onDelete }) => {
     const [cancelling, setCancelling] = React.useState(false);
     const [deleting, setDeleting] = React.useState(false);
+    const [paying, setPaying] = React.useState(false);
+
+    const handlePayBill = async () => {
+        setPaying(true);
+        try {
+            const res = await fetch(`${BASE_URL}/payments/checkout-session/${booking._id}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || "Something went wrong");
+            }
+
+            if (data.session.url) {
+                window.location.href = data.session.url;
+            }
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setPaying(false);
+        }
+    };
 
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to remove this appointment from your list?")) return;
@@ -118,6 +145,17 @@ const BookingCard = ({ booking, onCancel, onDelete }) => {
                         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#4e545f" }}>
                             <BsCalendarCheck /> ₹{booking.ticketPrice} ticket
                         </div>
+                        {booking.isPaid ? (
+                            <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#16a34a", fontWeight: 700, fontSize: 13 }}>
+                                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
+                                Paid
+                            </span>
+                        ) : (
+                            <span style={{ display: "flex", alignItems: "center", gap: 5, color: "#dc2626", fontWeight: 700, fontSize: 13 }}>
+                                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
+                                Not Paid
+                            </span>
+                        )}
                     </div>
 
                     {(booking.status === "pending" || booking.status === "approved") && (
@@ -141,6 +179,29 @@ const BookingCard = ({ booking, onCancel, onDelete }) => {
                             onMouseLeave={e => e.currentTarget.style.background = "none"}
                         >
                             {cancelling ? "Cancelling…" : "Cancel Appointment"}
+                        </button>
+                    )}
+
+                    {booking.status === "approved" && !booking.isPaid && (
+                        <button
+                            onClick={handlePayBill}
+                            disabled={paying}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 6,
+                                padding: "8px 16px",
+                                borderRadius: 8,
+                                background: "#4f46e5",
+                                color: "#fff",
+                                border: "1px solid #4338ca",
+                                fontWeight: 700,
+                                fontSize: 13,
+                                cursor: "pointer",
+                                opacity: paying ? 0.6 : 1,
+                            }}
+                        >
+                            <FaFileInvoice /> {paying ? "Redirecting..." : "Pay Bill"}
                         </button>
                     )}
 

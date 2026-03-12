@@ -9,6 +9,7 @@ import userRoute from "./Routes/user.js";
 import doctorRoute from "./Routes/doctor.js";
 import reviewRoute from "./Routes/review.js";
 import bookingRoute from "./Routes/booking.js";
+import paymentRoute from "./Routes/payment.js";
 
 dotenv.config();
 
@@ -20,9 +21,14 @@ const corsOptions = {
 };
 
 // ✅ Middleware FIRST
-app.use(express.json());
-app.use(cookieParser());
 app.use(cors(corsOptions));
+app.use(cookieParser());
+
+// ✅ Routes with special body requirements (Stripe Webhook)
+app.use("/api/v1/payments", paymentRoute);
+
+app.use(express.json());
+
 
 // ✅ Routes AFTER middleware
 app.use("/api/v1/auth", authRoute);

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+import { authContext } from "../context/AuthContext";
 
 const CheckoutSuccess = () => {
+    const { role } = useContext(authContext);
+
     return (
         <div style={{
             minHeight: "80vh",
@@ -63,7 +66,7 @@ const CheckoutSuccess = () => {
                         Return to Homepage
                     </Link>
                     <Link
-                        to="/doctors/profile/me"
+                        to={role === "doctor" ? "/doctors/profile/me" : "/users/profile/me"}
                         style={{
                             display: "block",
                             padding: "14px",
@@ -82,5 +85,6 @@ const CheckoutSuccess = () => {
         </div>
     );
 };
+
 
 export default CheckoutSuccess;

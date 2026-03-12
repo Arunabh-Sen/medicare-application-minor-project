@@ -177,7 +177,7 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                         <FaCheckDouble /> Mark Complete
                     </button>
                 )}
-                {booking.status !== "pending" && booking.status !== "cancelled" && booking.status !== "completed" && (
+                {booking.status !== "pending" && booking.status !== "cancelled" && booking.status !== "completed" && !booking.isPaid && (
                     <button
                         onClick={() => changeStatus("pending")}
                         disabled={updating}
@@ -193,7 +193,7 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                         <FaClock /> Set Pending
                     </button>
                 )}
-                {booking.status !== "cancelled" && booking.status !== "completed" && (
+                {booking.status !== "cancelled" && booking.status !== "completed" && !booking.isPaid && (
                     <button
                         onClick={() => changeStatus("cancelled")}
                         disabled={updating || deleting}
@@ -209,7 +209,7 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                         <FaTimes /> Cancel
                     </button>
                 )}
-                {(booking.status === "cancelled" || booking.status === "completed") && (
+                {(booking.status === "cancelled" || booking.status === "completed" || booking.isPaid) && (
                     <button
                         onClick={handleDelete}
                         disabled={updating || deleting}
@@ -226,6 +226,7 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                     </button>
                 )}
             </div>
+
         </div>
     );
 };

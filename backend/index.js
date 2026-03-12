@@ -10,6 +10,7 @@ import doctorRoute from "./Routes/doctor.js";
 import reviewRoute from "./Routes/review.js";
 import bookingRoute from "./Routes/booking.js";
 import paymentRoute from "./Routes/payment.js";
+import { stripeWebhook } from "./Controllers/paymentController.js";
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // ✅ Routes with special body requirements (Stripe Webhook)
+// This MUST come before express.json()
+app.post("/api/v1/payments/webhook", express.raw({ type: "application/json" }), stripeWebhook);
+
 app.use("/api/v1/payments", paymentRoute);
 
 app.use(express.json());

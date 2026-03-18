@@ -158,7 +158,7 @@ const BookingCard = ({ booking, onCancel, onDelete }) => {
                         )}
                     </div>
 
-                    {(booking.status === "pending" || booking.status === "approved") && (
+                    {!booking.isPaid && (booking.status === "pending" || booking.status === "approved") && (
                         <button
                             onClick={handleCancel}
                             disabled={cancelling}
@@ -205,31 +205,7 @@ const BookingCard = ({ booking, onCancel, onDelete }) => {
                         </button>
                     )}
 
-                    {booking.status === "cancelled" && (
-                        <button
-                            onClick={handleDelete}
-                            disabled={deleting}
-                            style={{
-                                background: "none",
-                                border: "none",
-                                color: "#181a1e",
-                                fontSize: 13,
-                                fontWeight: 600,
-                                cursor: "pointer",
-                                padding: "4px 8px",
-                                borderRadius: 6,
-                                transition: "all 0.2s",
-                                textDecoration: "underline",
-                                opacity: deleting ? 0.6 : 1,
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = "#f1f5f9"}
-                            onMouseLeave={e => e.currentTarget.style.background = "none"}
-                        >
-                            {deleting ? "Removing…" : "Remove from List"}
-                        </button>
-                    )}
-
-                    {booking.status === "completed" && (
+                    {(booking.status === "cancelled" || booking.status === "completed" || booking.isPaid) && (
                         <button
                             onClick={handleDelete}
                             disabled={deleting}

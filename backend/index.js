@@ -17,7 +17,9 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const corsOptions = {
-    origin: true
+    origin: true,
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // ✅ Middleware FIRST

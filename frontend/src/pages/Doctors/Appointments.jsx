@@ -24,9 +24,72 @@ const StatusBadge = ({ status }) => {
     );
 };
 
+const PatientDetailsModal = ({ patient, onClose }) => {
+    if (!patient) return null;
+
+    return (
+        <div style={{
+            position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+            background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center",
+            zIndex: 1000, padding: 20
+        }} onClick={onClose}>
+            <div style={{
+                background: "#fff", borderRadius: 16, padding: 32, maxWidth: 500, width: "100%",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.1)", position: "relative"
+            }} onClick={e => e.stopPropagation()}>
+                <button
+                    onClick={onClose}
+                    style={{
+                        position: "absolute", top: 16, right: 16, border: "none", background: "none",
+                        fontSize: 20, cursor: "pointer", color: "#8a97aa"
+                    }}
+                >
+                    <FaTimes />
+                </button>
+                <h2 style={{ fontSize: 22, fontWeight: 700, color: "#181a1e", marginBottom: 24 }}>Patient Details</h2>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f0f4f8", paddingBottom: 8 }}>
+                        <span style={{ color: "#8a97aa", fontSize: 14 }}>Full Name</span>
+                        <span style={{ color: "#181a1e", fontWeight: 600 }}>{patient.name}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f0f4f8", paddingBottom: 8 }}>
+                        <span style={{ color: "#8a97aa", fontSize: 14 }}>Email Address</span>
+                        <span style={{ color: "#181a1e", fontWeight: 600 }}>{patient.email}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f0f4f8", paddingBottom: 8 }}>
+                        <span style={{ color: "#8a97aa", fontSize: 14 }}>Phone Number</span>
+                        <span style={{ color: "#181a1e", fontWeight: 600 }}>{patient.phone || "Not provided"}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f0f4f8", paddingBottom: 8 }}>
+                        <span style={{ color: "#8a97aa", fontSize: 14 }}>Gender</span>
+                        <span style={{ color: "#181a1e", fontWeight: 600, textTransform: "capitalize" }}>{patient.gender || "Not provided"}</span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f0f4f8", paddingBottom: 8 }}>
+                        <span style={{ color: "#8a97aa", fontSize: 14 }}>Blood Group</span>
+                        <span style={{ color: "#181a1e", fontWeight: 600 }}>{patient.bloodType || "Not provided"}</span>
+                    </div>
+                </div>
+
+                <button
+                    onClick={onClose}
+                    style={{
+                        marginTop: 32, width: "100%", background: "#0067ff", color: "#fff",
+                        border: "none", borderRadius: 8, padding: "12px 0", fontWeight: 600,
+                        cursor: "pointer"
+                    }}
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+    );
+};
+
 const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
     const [updating, setUpdating] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [showPatientModal, setShowPatientModal] = useState(false);
 
     const handleDelete = async () => {
 
@@ -145,6 +208,18 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
 
             {/* Action buttons */}
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
+                <button
+                    onClick={() => setShowPatientModal(true)}
+                    style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        padding: "8px 16px", borderRadius: 8,
+                        background: "#f0f4f8", color: "#4e545f",
+                        border: "1px solid #d1d5db",
+                        fontWeight: 600, fontSize: 13, cursor: "pointer",
+                    }}
+                >
+                    Show Patient Details
+                </button>
                 {!booking.isPaid && booking.status !== "approved" && booking.status !== "completed" && (
                     <button
                         onClick={() => changeStatus("approved")}
@@ -226,6 +301,13 @@ const AppointmentCard = ({ booking, onStatusChange, onDelete }) => {
                     </button>
                 )}
             </div>
+
+            {showPatientModal && (
+                <PatientDetailsModal
+                    patient={patient}
+                    onClose={() => setShowPatientModal(false)}
+                />
+            )}
         </div>
     );
 };

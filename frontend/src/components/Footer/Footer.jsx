@@ -1,24 +1,21 @@
 import React from 'react'
 import { BsArrowRight } from 'react-icons/bs'
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 const quickLinks01 = [
-  { display: 'Home' },
-  { display: 'About Us' },
-  { display: 'Services' },
-  { display: 'Blog' },
+  { display: 'Home', path: '/home' },
+  { display: 'About Us', path: '/home' },
+  { display: 'Services', path: '/services' },
 ]
 
 const quickLinks02 = [
-  { display: 'Find a Doctor' },
-  { display: 'Request an Appointment' },
-  { display: 'Find a Location' },
-  { display: 'Get an Opinion' },
+  { display: 'Find a Doctor', path: '/doctors' },
+  { display: 'Request an Appointment', path: '/doctors' },
 ]
 
 const quickLinks03 = [
-  { display: 'Donate' },
-  { display: 'Contact Us' },
+  { display: 'Contact Us', path: '/contact' },
 ]
 
 const Footer = () => {
@@ -54,10 +51,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks01.map((link, i) => (
                 <li key={i}>
-                  <a href="#" className="footer__link">
+                  <Link to={link.path} className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -68,10 +65,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks02.map((link, i) => (
                 <li key={i}>
-                  <a href="#" className="footer__link">
+                  <Link to={link.path} className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -82,10 +79,10 @@ const Footer = () => {
             <ul className="footer__links__list">
               {quickLinks03.map((link, i) => (
                 <li key={i}>
-                  <a href="#" className="footer__link">
+                  <Link to={link.path} className="footer__link">
                     <BsArrowRight className="footer__link__icon" />
                     {link.display}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

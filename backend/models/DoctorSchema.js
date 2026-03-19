@@ -20,7 +20,7 @@ const DoctorSchema = new mongoose.Schema({
     type: Array,
   },
 
-  bio: { type: String, maxLength: 50 },
+  bio: { type: String, maxLength: 500 },
   about: { type: String },
   address: { type: String },
   timeSlots: { type: Array },
